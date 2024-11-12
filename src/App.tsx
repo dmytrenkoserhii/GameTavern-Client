@@ -1,5 +1,7 @@
+import { AppProvider } from '@/providers';
+
 function App() {
-  return <>Test</>;
+  return <AppProvider />;
 }
 
 export default App;
