@@ -28,7 +28,8 @@ i18n
       escapeValue: false,
     },
     backend: {
-      loadPath: import.meta.env.VITE_TRANSLATIONS_URL,
+      loadPath:
+        import.meta.env.VITE_BACKEND_URL + '/locales/{{lng}}/{{ns}}.json',
     },
   });
 
