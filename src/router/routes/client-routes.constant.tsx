@@ -1,9 +1,19 @@
-import { Home } from '@/pages';
-import { RouteObject } from 'react-router-dom';
+import { AuthLayout, UnauthLayout } from "@/layouts";
+import { Home } from "@/pages";
+import { RouteObject } from "react-router-dom";
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
-    path: '/',
-    element: <Home />,
+    element: <AuthLayout />,
+    children: [],
+  },
+  {
+    element: <UnauthLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+    ],
   },
 ];
