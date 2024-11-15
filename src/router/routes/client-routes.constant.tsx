@@ -5,12 +5,7 @@ import { RouteObject } from "react-router-dom";
 export const CLIENT_ROUTES: RouteObject[] = [
   {
     element: <AuthLayout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-    ],
+    children: [],
   },
   {
     element: <UnauthLayout />,
