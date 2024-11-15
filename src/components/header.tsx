@@ -29,7 +29,7 @@ export const Header: React.FC = () => {
         {showAuthContent ? (
           <Group>
             <Anchor component={Link} to="/games" underline="never" c="inherit">
-              {t("header.games-link")}
+              {t("header.games_link")}
             </Anchor>
             <TextInput placeholder={t("header.search")} />
             <Menu shadow="md" width={200}>
@@ -49,7 +49,7 @@ export const Header: React.FC = () => {
           </Group>
         ) : (
           <Group>
-            <Button>{t("general.sign-in")}</Button>
+            <Button>{t("general.sign_in")}</Button>
           </Group>
         )}
       </Group>
