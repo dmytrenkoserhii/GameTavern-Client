@@ -9,9 +9,9 @@ export const NotFoundPage: React.FC = () => {
   return (
     <Center h="100vh">
       <Box>
-        <Title order={1}>{t("router.not-found")}</Title>
+        <Title order={1}>{t("not_found.text")}</Title>
         <Button component={Link} to="/" fullWidth variant="light" color="cyan">
-          {t("router.home-page")}
+          {t("not_found.home_page")}
         </Button>
       </Box>
     </Center>
