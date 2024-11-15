@@ -15,7 +15,7 @@ export const UnauthHeader: React.FC = () => {
         </Group>
 
         <Group>
-          <Button>{t("header.sign-in-button")}</Button>
+          <Button>{t("general.sign-in")}</Button>
         </Group>
       </Group>
     </Center>

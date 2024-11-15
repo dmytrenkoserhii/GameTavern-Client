@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
     <Box py="xs">
       <Divider py={4} />
       <Group justify="center">
-        <Text>{t("footer.createdBy", { year: currentYear })}</Text>
+        <Text>{t("footer.created-by", { year: currentYear })}</Text>
       </Group>
     </Box>
   );
