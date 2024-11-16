@@ -15,10 +15,13 @@ import {
 } from '@mantine/core';
 import { FcGoogle } from 'react-icons/fc';
 import { SignInFormSchema } from '../schemas';
+import { useTranslation } from 'react-i18next';
 
 type SignInFormData = z.infer<typeof SignInFormSchema>;
 
 export const SignInForm: React.FC = () => {
+  const { t } = useTranslation();
+
   const form = useForm<SignInFormData>({
     validate: zodResolver(SignInFormSchema),
     initialValues: {
@@ -31,52 +34,55 @@ export const SignInForm: React.FC = () => {
   return (
     <Paper shadow="md" radius="md" p="xl" withBorder w={600}>
       <Title order={2} ta="center" mt="md" mb={50}>
-        Welcome back!
+        {t('auth.signin.welcome')}
       </Title>
 
-      {/* <form onSubmit={form.onSubmit(handleSubmit)}> */}
       <form>
         <Stack gap="md">
           <TextInput
             required
-            label="Email / Username"
-            placeholder="your@email.com"
+            label={t('auth.signin.email_label')}
+            placeholder={t('auth.signin.email_placeholder')}
             {...form.getInputProps('email')}
           />
 
           <PasswordInput
             required
-            label="Password"
-            placeholder="Your password"
+            label={t('auth.signin.password_label')}
+            placeholder={t('auth.signin.password_placeholder')}
             {...form.getInputProps('password')}
           />
 
           <Group justify="space-between">
             <Checkbox
-              label="Remember me"
+              label={t('auth.signin.remember_me')}
               {...form.getInputProps('remember', { type: 'checkbox' })}
             />
             <Anchor component="button" type="button" size="sm">
-              Forgot password?
+              {t('auth.signin.forgot_password')}
             </Anchor>
           </Group>
 
           <Button type="submit" fullWidth mt="xl">
-            Sign in
+            {t('auth.signin.submit')}
           </Button>
         </Stack>
       </form>
 
-      <Divider label="Or continue with" labelPosition="center" my="lg" />
+      <Divider
+        label={t('auth.signin.divider')}
+        labelPosition="center"
+        my="lg"
+      />
 
       <Button variant="outline" fullWidth>
         <FcGoogle size={20} style={{ marginRight: '8px' }} />
-        Continue with Google
+        {t('auth.signin.google')}
       </Button>
 
       <Group justify="center" mt="md">
         <Anchor component="button" type="button" size="sm">
-          Don't have an account? Register
+          {t('auth.signin.register_prompt')}
         </Anchor>
       </Group>
     </Paper>
