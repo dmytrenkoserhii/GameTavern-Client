@@ -4,7 +4,6 @@ import { useForm, zodResolver } from '@mantine/form';
 import {
   TextInput,
   PasswordInput,
-  Checkbox,
   Button,
   Group,
   Stack,
@@ -16,6 +15,8 @@ import {
 import { FcGoogle } from 'react-icons/fc';
 import { SignInFormSchema } from '../schemas';
 import { useTranslation } from 'react-i18next';
+import { Routes } from '@/enums/routes.enum';
+import { Link } from 'react-router-dom';
 
 type SignInFormData = z.infer<typeof SignInFormSchema>;
 
@@ -27,7 +28,6 @@ export const SignInForm: React.FC = () => {
     initialValues: {
       email: '',
       password: '',
-      remember: false,
     },
   });
 
@@ -53,12 +53,13 @@ export const SignInForm: React.FC = () => {
             {...form.getInputProps('password')}
           />
 
-          <Group justify="space-between">
-            <Checkbox
-              label={t('auth.signin.remember_me')}
-              {...form.getInputProps('remember', { type: 'checkbox' })}
-            />
-            <Anchor component="button" type="button" size="sm">
+          <Group justify="flex-end">
+            <Anchor
+              component={Link}
+              to={Routes.FORGOT_PASSWORD}
+              type="button"
+              size="sm"
+            >
               {t('auth.signin.forgot_password')}
             </Anchor>
           </Group>
@@ -81,7 +82,7 @@ export const SignInForm: React.FC = () => {
       </Button>
 
       <Group justify="center" mt="md">
-        <Anchor component="button" type="button" size="sm">
+        <Anchor component={Link} to={Routes.REGISTER} type="button" size="sm">
           {t('auth.signin.register_prompt')}
         </Anchor>
       </Group>
