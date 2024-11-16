@@ -1,7 +1,7 @@
-import { AuthLayout, UnauthLayout } from "@/layouts";
-import { Home } from "@/pages";
-import { RouteObject } from "react-router-dom";
-import { NotFoundPage } from "../components";
+import { AuthLayout, UnauthLayout } from '@/layouts';
+import { HomePage, NotFoundPage } from '@/pages';
+import { RouteObject } from 'react-router-dom';
+import { Routes } from '@/enums/routes.enum';
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
@@ -9,35 +9,35 @@ export const CLIENT_ROUTES: RouteObject[] = [
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: "games",
+        path: Routes.GAMES,
         element: <div>Games</div>,
       },
       {
-        path: "game/:id",
+        path: `${Routes.GAME}/:id`,
         element: <div>Game</div>,
       },
       {
-        path: "profile",
+        path: Routes.PROFILE,
         element: <div>Profile</div>,
       },
       {
-        path: "lists",
+        path: Routes.LISTS,
         element: <div>Lists</div>,
       },
       {
-        path: "list/:id",
+        path: `${Routes.LIST}/:id`,
         element: <div>List</div>,
       },
       {
-        path: "create-list",
+        path: Routes.CREATE_LIST,
         element: <div>Create List</div>,
       },
       {
-        path: "confirm-email",
+        path: Routes.CONFIRM_EMAIL,
         element: <div>Confirm Email</div>,
       },
       {
-        path: "forgot-password",
+        path: Routes.FORGOT_PASSWORD,
         element: <div>Forgot Password</div>,
       },
     ],
@@ -47,15 +47,15 @@ export const CLIENT_ROUTES: RouteObject[] = [
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: "/",
-        element: <Home />,
+        path: Routes.HOME,
+        element: <HomePage />,
       },
       {
-        path: "login",
+        path: Routes.LOGIN,
         element: <div>Login</div>,
       },
       {
-        path: "register",
+        path: Routes.REGISTER,
         element: <div>Register</div>,
       },
     ],
