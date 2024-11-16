@@ -14,6 +14,7 @@ import React from 'react';
 import { UserIcon } from '../user-icon';
 import { Routes } from '@/enums/routes.enum';
 import logo from '@/assets/logo.png';
+import { LanguageSelector } from '../language-selector';
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();
@@ -60,6 +61,8 @@ export const Header: React.FC = () => {
             </Group>
 
             {headerContent}
+
+            <LanguageSelector />
           </Group>
         </Container>
       </Center>
