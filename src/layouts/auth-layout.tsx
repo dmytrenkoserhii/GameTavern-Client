@@ -1,25 +1,34 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { Container, Stack } from '@mantine/core';
-import { Footer, Header } from '@/components';
+import { Footer, Header, Navbar } from '@/components';
+import { AppShell, Burger, Group } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 
 export const AuthLayout: React.FC = () => {
+  const [opened, { toggle }] = useDisclosure();
+
   return (
-    <Stack h='100dvh' w='100%' justify='space-between'>
-      <Header />
-
-      <Container
-        component='main'
-        maw='80rem'
-        w='100%'
-        px='md'
-        m='0 auto'
-        flex='1'
-      >
+    <AppShell
+      header={{ height: 80 }}
+      footer={{ height: 60 }}
+      navbar={{ width: 280, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      padding='md'
+    >
+      <AppShell.Header>
+        <Group h='100%' px='md'>
+          <Burger opened={opened} onClick={toggle} hiddenFrom='sm' size='sm' />
+          <Header />
+        </Group>
+      </AppShell.Header>
+      <AppShell.Navbar p='md'>
+        <Navbar />
+      </AppShell.Navbar>
+      <AppShell.Main>
         <Outlet />
-      </Container>
-
-      <Footer />
-    </Stack>
+      </AppShell.Main>
+      <AppShell.Footer p='md'>
+        <Footer />
+      </AppShell.Footer>
+    </AppShell>
   );
 };
