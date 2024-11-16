@@ -17,10 +17,6 @@ export const CLIENT_ROUTES: RouteObject[] = [
         element: <div>Game</div>,
       },
       {
-        path: Routes.PROFILE,
-        element: <div>Profile</div>,
-      },
-      {
         path: Routes.LISTS,
         element: <div>Lists</div>,
       },
@@ -31,6 +27,26 @@ export const CLIENT_ROUTES: RouteObject[] = [
       {
         path: Routes.CREATE_LIST,
         element: <div>Create List</div>,
+      },
+      {
+        path: Routes.FRIENDS,
+        element: <div>Friends</div>,
+      },
+      {
+        path: Routes.MESSAGES,
+        element: <div>Messages</div>,
+      },
+      {
+        path: Routes.PROFILE,
+        element: <div>Profile</div>,
+      },
+      {
+        path: Routes.SETTINGS,
+        element: <div>Settings</div>,
+      },
+      {
+        path: Routes.SUBSCRIPTION,
+        element: <div>Subscription</div>,
       },
       {
         path: Routes.CONFIRM_EMAIL,
