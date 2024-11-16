@@ -2,6 +2,7 @@ import { AuthLayout, UnauthLayout } from '@/layouts';
 import { HomePage, NotFoundPage } from '@/pages';
 import { RouteObject } from 'react-router-dom';
 import { Routes } from '@/enums/routes.enum';
+import { SignInPage } from '@/features/authentication';
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
@@ -68,7 +69,7 @@ export const CLIENT_ROUTES: RouteObject[] = [
       },
       {
         path: Routes.LOGIN,
-        element: <div>Login</div>,
+        element: <SignInPage />,
       },
       {
         path: Routes.REGISTER,
