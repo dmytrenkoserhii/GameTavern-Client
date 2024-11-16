@@ -1,16 +1,19 @@
 import { Routes } from '@/enums/routes.enum';
-import { Menu, ActionIcon } from '@mantine/core';
+import { Menu } from '@mantine/core';
 import { t } from 'i18next';
-import { RiUserLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import userIcon from '@/assets/user.png';
 
 export const UserIcon: React.FC = () => {
   return (
     <Menu shadow='md' width={200}>
       <Menu.Target>
-        <ActionIcon variant='subtle' size='lg'>
-          <RiUserLine size={22} />{' '}
-        </ActionIcon>
+        <img
+          height={60}
+          src={userIcon}
+          alt='user'
+          style={{ cursor: 'pointer' }}
+        />
       </Menu.Target>
 
       <Menu.Dropdown>
