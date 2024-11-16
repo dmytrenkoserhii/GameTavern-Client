@@ -4,7 +4,6 @@ export const SignInFormSchema = z
   .object({
     email: z.string().email(),
     password: z.string().min(6),
-    remember: z.boolean().optional(),
   })
   .superRefine(({ password }, checkPassComplexity) => {
     const containsUppercase = /[A-Z]/.test(password);
@@ -13,16 +12,35 @@ export const SignInFormSchema = z
     const containsSpecialChar = /[`!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?~ ]/.test(
       password
     );
-    if (
-      !containsUppercase ||
-      !containsLowercase ||
-      !containsNumber ||
-      !containsSpecialChar
-    ) {
+    if (!containsUppercase) {
       checkPassComplexity.addIssue({
         code: 'custom',
         path: ['password'],
-        message: 'Password does not meet complexity requirements',
+        message: 'Password must contain at least one uppercase letter!',
+      });
+    }
+
+    if (!containsLowercase) {
+      checkPassComplexity.addIssue({
+        code: 'custom',
+        path: ['password'],
+        message: 'Password must contain at least one lowercase letter!',
+      });
+    }
+
+    if (!containsNumber) {
+      checkPassComplexity.addIssue({
+        code: 'custom',
+        path: ['password'],
+        message: 'Password must contain at least one number!',
+      });
+    }
+
+    if (!containsSpecialChar) {
+      checkPassComplexity.addIssue({
+        code: 'custom',
+        path: ['password'],
+        message: 'Password must contain at least one special character!',
       });
     }
   });
