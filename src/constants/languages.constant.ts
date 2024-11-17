@@ -2,11 +2,11 @@ import { SelectItem } from '@/types';
 
 export const LANGUAGES: SelectItem[] = [
   {
-    key: 'en',
-    value: 'EN',
+    value: 'en',
+    label: 'EN',
   },
   {
-    key: 'uk',
-    value: 'UK',
+    value: 'uk',
+    label: 'UK',
   },
 ];

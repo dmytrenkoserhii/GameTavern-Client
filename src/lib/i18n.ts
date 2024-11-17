@@ -20,7 +20,7 @@ i18n
 
       caches: ['localStorage'],
     },
-    supportedLngs: LANGUAGES.map((language) => language.key),
+    supportedLngs: LANGUAGES.map((language) => language.value),
     ns: ['translations'],
     debug: true,
     fallbackLng: 'en',
