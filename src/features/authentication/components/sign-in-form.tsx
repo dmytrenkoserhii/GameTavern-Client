@@ -1,22 +1,27 @@
-import React from 'react';
 import { z } from 'zod';
-import { useForm, zodResolver } from '@mantine/form';
-import {
-  TextInput,
-  PasswordInput,
-  Button,
-  Group,
-  Stack,
-  Anchor,
-  Paper,
-  Title,
-  Divider,
-} from '@mantine/core';
-import { FcGoogle } from 'react-icons/fc';
-import { SignInFormSchema } from '../schemas';
+
+import React from 'react';
+
 import { useTranslation } from 'react-i18next';
-import { Routes } from '@/enums/routes.enum';
+import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
+
+import {
+  Anchor,
+  Button,
+  Divider,
+  Group,
+  Paper,
+  PasswordInput,
+  Stack,
+  TextInput,
+  Title,
+} from '@mantine/core';
+import { useForm, zodResolver } from '@mantine/form';
+
+import { Routes } from '@/enums/routes.enum';
+
+import { SignInFormSchema } from '../schemas';
 
 type SignInFormData = z.infer<typeof SignInFormSchema>;
 
@@ -54,12 +59,7 @@ export const SignInForm: React.FC = () => {
           />
 
           <Group justify="flex-end">
-            <Anchor
-              component={Link}
-              to={Routes.FORGOT_PASSWORD}
-              type="button"
-              size="sm"
-            >
+            <Anchor component={Link} to={Routes.FORGOT_PASSWORD} type="button" size="sm">
               {t('auth.signin.forgot_password')}
             </Anchor>
           </Group>
@@ -70,11 +70,7 @@ export const SignInForm: React.FC = () => {
         </Stack>
       </form>
 
-      <Divider
-        label={t('auth.signin.divider')}
-        labelPosition="center"
-        my="lg"
-      />
+      <Divider label={t('auth.signin.divider')} labelPosition="center" my="lg" />
 
       <Button variant="outline" fullWidth>
         <FcGoogle size={20} style={{ marginRight: '8px' }} />

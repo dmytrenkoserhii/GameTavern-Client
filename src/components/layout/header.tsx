@@ -1,9 +1,13 @@
-import { Button, Group, TextInput } from '@mantine/core';
-import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import React from 'react';
-import { Routes } from '@/enums/routes.enum';
+
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+
+import { Button, Group, TextInput } from '@mantine/core';
+
 import logo from '@/assets/logo.png';
+import { Routes } from '@/enums/routes.enum';
+
 import { LanguageSelector } from '../language-selector';
 
 export const Header: React.FC = () => {
@@ -13,7 +17,7 @@ export const Header: React.FC = () => {
   let headerContent: React.ReactNode;
   if (user) {
     headerContent = (
-      <Group flex={1} justify='space-between' ml='xl'>
+      <Group flex={1} justify="space-between" ml="xl">
         <TextInput placeholder={t('header.search')} />
       </Group>
     );
@@ -26,9 +30,9 @@ export const Header: React.FC = () => {
   }
 
   return (
-    <Group justify='space-between' py='sm' wrap='nowrap' flex={1}>
+    <Group justify="space-between" py="sm" wrap="nowrap" flex={1}>
       <Link to={Routes.HOME}>
-        <img height={50} src={logo} alt='logo' />
+        <img height={50} src={logo} alt="logo" />
       </Link>
 
       <Group>

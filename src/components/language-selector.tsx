@@ -1,6 +1,8 @@
-import { LANGUAGES } from '@/constants';
-import { Select } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
+
+import { Select } from '@mantine/core';
+
+import { LANGUAGES } from '@/constants';
 
 export const LanguageSelector: React.FC = () => {
   const { i18n } = useTranslation();

@@ -28,19 +28,13 @@ i18n
       escapeValue: false,
     },
     backend: {
-      loadPath:
-        import.meta.env.VITE_BACKEND_URL + '/locales/{{lng}}/{{ns}}.json',
+      loadPath: import.meta.env.VITE_BACKEND_URL + '/locales/{{lng}}/{{ns}}.json',
     },
   });
 
-i18n.services.formatter?.add(
-  'DATE_HUGE',
-  (value: Date, lng: string | undefined) => {
-    const language = lng || i18n.language || 'en';
-    return DateTime.fromJSDate(value)
-      .setLocale(language)
-      .toLocaleString(DateTime.DATE_HUGE);
-  }
-);
+i18n.services.formatter?.add('DATE_HUGE', (value: Date, lng: string | undefined) => {
+  const language = lng || i18n.language || 'en';
+  return DateTime.fromJSDate(value).setLocale(language).toLocaleString(DateTime.DATE_HUGE);
+});
 
 export default i18n;

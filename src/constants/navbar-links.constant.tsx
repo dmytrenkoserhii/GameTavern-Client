@@ -1,12 +1,12 @@
+import { BsChatDots } from 'react-icons/bs';
+import { FaGamepad, FaUser } from 'react-icons/fa';
+import { GiScrollUnfurled } from 'react-icons/gi';
+import { IoMdSettings } from 'react-icons/io';
+import { MdGroups } from 'react-icons/md';
+import { RiHandCoinFill } from 'react-icons/ri';
+
 import { Routes } from '@/enums/routes.enum';
 import { NavbarLink } from '@/types';
-import { FaGamepad } from 'react-icons/fa';
-import { GiScrollUnfurled } from 'react-icons/gi';
-import { MdGroups } from 'react-icons/md';
-import { BsChatDots } from 'react-icons/bs';
-import { FaUser } from 'react-icons/fa';
-import { IoMdSettings } from 'react-icons/io';
-import { RiHandCoinFill } from 'react-icons/ri';
 
 export const NAVBAR_LINKS: NavbarLink[] = [
   {

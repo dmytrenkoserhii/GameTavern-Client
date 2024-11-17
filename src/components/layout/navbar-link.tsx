@@ -1,7 +1,9 @@
-import { NavbarLink as INavbarLink } from '@/types';
-import { NavLink } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+
+import { NavLink } from '@mantine/core';
+
+import { NavbarLink as INavbarLink } from '@/types';
 
 interface NavbarLinkProps {
   link: INavbarLink;

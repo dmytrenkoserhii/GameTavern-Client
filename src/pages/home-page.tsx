@@ -1,8 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { GiGamepad } from 'react-icons/gi';
 import { MdList } from 'react-icons/md';
-import { Container, Text, Button, Group, Stack, Paper } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+
+import { Button, Container, Group, Paper, Stack, Text } from '@mantine/core';
 
 export const HomePage = () => {
   const { t } = useTranslation();
