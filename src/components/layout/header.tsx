@@ -9,6 +9,7 @@ import logo from '@/assets/logo.png';
 import { Routes } from '@/enums/routes.enum';
 
 import { LanguageSelector } from '../language-selector';
+import { ThemeSelector } from '../theme-selector';
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ export const Header: React.FC = () => {
         {headerContent}
 
         <LanguageSelector />
+        <ThemeSelector />
       </Group>
     </Group>
   );
