@@ -1,9 +1,9 @@
 export enum Routes {
   HOME = '/',
   GAMES = '/games',
-  GAME = '/game',
+  GAME = '/games/',
   LISTS = '/lists',
-  LIST = '/list',
+  LIST = '/lists/',
   CREATE_LIST = '/create-list',
   FRIENDS = '/friends',
   MESSAGES = '/messages',
@@ -16,5 +16,5 @@ export enum Routes {
   SUBSCRIPTION = '/subscription',
 }
 
-export const getGameRoute = (id: string) => `${Routes.GAME}/${id}`;
-export const getListRoute = (id: string) => `${Routes.LIST}/${id}`;
+export const getGameRoute = (id: string) => `${Routes.GAME}${id}`;
+export const getListRoute = (id: string) => `${Routes.LIST}${id}`;

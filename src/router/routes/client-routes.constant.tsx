@@ -14,7 +14,7 @@ export const CLIENT_ROUTES: RouteObject[] = [
         element: <div>Games</div>,
       },
       {
-        path: `${Routes.GAME}/:id`,
+        path: `${Routes.GAME}:id`,
         element: <div>Game</div>,
       },
       {
@@ -22,7 +22,7 @@ export const CLIENT_ROUTES: RouteObject[] = [
         element: <div>Lists</div>,
       },
       {
-        path: `${Routes.LIST}/:id`,
+        path: `${Routes.LIST}:id`,
         element: <div>List</div>,
       },
       {
