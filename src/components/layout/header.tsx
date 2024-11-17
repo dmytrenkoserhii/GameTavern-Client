@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
   }
 
   return (
-    <Group justify='space-between' px='md' py='sm' wrap='nowrap' flex={1}>
+    <Group justify='space-between' py='sm' wrap='nowrap' flex={1}>
       <Link to={Routes.HOME}>
         <img height={50} src={logo} alt='logo' />
       </Link>

@@ -13,7 +13,7 @@ export const LanguageSelector: React.FC = () => {
         value: lng.key,
         label: lng.value,
       }))}
-      w={75}
+      w={85}
     />
   );
 };

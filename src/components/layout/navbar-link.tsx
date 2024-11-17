@@ -1,5 +1,5 @@
 import { NavbarLink as INavbarLink } from '@/types';
-import { Anchor } from '@mantine/core';
+import { NavLink } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -11,14 +11,11 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({ link }) => {
   const { t } = useTranslation();
 
   return (
-    <Anchor
+    <NavLink
       component={Link}
       to={link.to}
-      underline='never'
-      c='inherit'
-      size='lg'
-    >
-      {t(link.translationLabel)}
-    </Anchor>
+      label={t(link.translationLabel)}
+      leftSection={link.icon}
+    />
   );
 };

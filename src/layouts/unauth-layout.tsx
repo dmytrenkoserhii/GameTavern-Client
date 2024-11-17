@@ -1,25 +1,22 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { Container, Stack } from '@mantine/core';
+import { AppShell, Group } from '@mantine/core';
 import { Footer, Header } from '@/components';
 
 export const UnauthLayout: React.FC = () => {
   return (
-    <Stack h='100dvh' w='100%' justify='space-between'>
-      <Header />
-
-      <Container
-        component='main'
-        maw='80rem'
-        w='100%'
-        px='md'
-        m='0 auto'
-        flex='1'
-      >
+    <AppShell header={{ height: 80 }} footer={{ height: 60 }} padding='md'>
+      <AppShell.Header>
+        <Group h='100%' px='md'>
+          <Header />
+        </Group>
+      </AppShell.Header>
+      <AppShell.Main>
         <Outlet />
-      </Container>
-
-      <Footer />
-    </Stack>
+      </AppShell.Main>
+      <AppShell.Footer p='md'>
+        <Footer />
+      </AppShell.Footer>
+    </AppShell>
   );
 };

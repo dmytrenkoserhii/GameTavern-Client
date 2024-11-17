@@ -15,8 +15,8 @@ export const Navbar: React.FC = () => {
       </Stack>
 
       <Stack>
-        <Button color='orange'>{t('navbar.premium')}</Button>
-        <Button>{t('navbar.logout')}</Button>
+        <Button color='tertiary'>{t('navbar.premium')}</Button>
+        <Button variant='outline'>{t('navbar.logout')}</Button>
       </Stack>
     </Stack>
   );
