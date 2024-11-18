@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { Button, Group, TextInput } from '@mantine/core';
+import { Button, Group, Image, TextInput } from '@mantine/core';
 
 import logo from '@/assets/logo.png';
 import { Routes } from '@/enums/routes.enum';
@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
   return (
     <Group justify="space-between" py="sm" wrap="nowrap" flex={1}>
       <Link to={Routes.HOME}>
-        <img height={50} src={logo} alt="logo" />
+        <Image height={50} src={logo} alt="logo" />
       </Link>
 
       <Group>
