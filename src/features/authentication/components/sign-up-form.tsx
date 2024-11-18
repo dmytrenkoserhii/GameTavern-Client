@@ -34,7 +34,7 @@ export const SignUpForm: React.FC = () => {
       email: '',
       password: '',
       passwordConfirmation: '',
-      terms: false,
+      terms: true,
     },
   });
 

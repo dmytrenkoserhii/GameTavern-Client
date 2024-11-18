@@ -6,7 +6,7 @@ export const SignUpFormSchema = z
     email: z.string().email({ message: 'Email is required' }),
     password: z.string().min(6),
     passwordConfirmation: z.string(),
-    terms: z.boolean().optional(),
+    terms: z.boolean(),
   })
   .refine(
     (values) => {
