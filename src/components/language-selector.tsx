@@ -11,10 +11,7 @@ export const LanguageSelector: React.FC = () => {
     <Select
       value={i18n.resolvedLanguage}
       onChange={(value) => value && i18n.changeLanguage(value)}
-      data={LANGUAGES.map((lng) => ({
-        value: lng.key,
-        label: lng.value,
-      }))}
+      data={LANGUAGES}
       w={85}
     />
   );
