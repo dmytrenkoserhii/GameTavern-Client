@@ -1,7 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 
 import { Routes } from '@/enums/routes.enum';
-import { SignInPage } from '@/features/authentication';
+import { SignInPage, SignUpPage } from '@/features/authentication';
 import { AuthLayout, UnauthLayout } from '@/layouts';
 import { HomePage, NotFoundPage } from '@/pages';
 
@@ -74,7 +74,7 @@ export const CLIENT_ROUTES: RouteObject[] = [
       },
       {
         path: Routes.REGISTER,
-        element: <div>Register</div>,
+        element: <SignUpPage />,
       },
     ],
   },
