@@ -21,8 +21,7 @@ export const HomePage = () => {
               to="/games"
               size="lg"
               leftSection={<GiGamepad size={24} />}
-              variant="gradient"
-              gradient={{ from: 'blue', to: 'cyan' }}
+              variant="outline"
             >
               {t('home.gamesButton')}
             </Button>
@@ -31,6 +30,7 @@ export const HomePage = () => {
               component={Link}
               to="/lists"
               size="lg"
+              color="secondary"
               variant="outline"
               leftSection={<MdList size={24} />}
             >
