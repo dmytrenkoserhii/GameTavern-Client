@@ -38,37 +38,38 @@ export const SignUpForm: React.FC = () => {
     },
   });
 
+  const handleSubmit = form.onSubmit((values) => {
+    // eslint-disable-next-line no-console
+    console.log(values);
+  });
+
   return (
     <Paper shadow="md" radius="md" p="xl" withBorder w={600}>
       <Title order={2} ta="center" mt="md" mb={50}>
         {t('auth.signup.register_button')}
       </Title>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <Stack gap="md">
           <TextInput
-            required
             label={t('auth.signup.username_label')}
             placeholder={t('auth.signup.username_placeholder')}
             {...form.getInputProps('username')}
           />
 
           <TextInput
-            required
             label={t('auth.signup.email_label')}
             placeholder={t('auth.signup.email_placeholder')}
             {...form.getInputProps('email')}
           />
 
           <PasswordInput
-            required
             label={t('auth.signup.password_label')}
             placeholder={t('auth.signup.password_placeholder')}
             {...form.getInputProps('password')}
           />
 
           <PasswordInput
-            required
             label={t('auth.signup.confirm_password_label')}
             placeholder={t('auth.signup.confirm_password_placeholder')}
             {...form.getInputProps('passwordConfirmation')}
