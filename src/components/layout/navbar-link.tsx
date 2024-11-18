@@ -22,7 +22,7 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({ link }) => {
       label={t(link.translationLabel)}
       leftSection={link.icon}
       active={isActive}
-      color='primary'
+      color="primary"
     />
   );
 };
