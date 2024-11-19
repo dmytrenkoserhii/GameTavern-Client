@@ -1,7 +1,12 @@
 import { RouteObject } from 'react-router-dom';
 
 import { Routes } from '@/enums/routes.enum';
-import { SignInPage, SignUpPage } from '@/features/authentication';
+import {
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  SignInPage,
+  SignUpPage,
+} from '@/features/authentication';
 import { AuthLayout, UnauthLayout } from '@/layouts';
 import { HomePage, NotFoundPage } from '@/pages';
 
@@ -54,10 +59,6 @@ export const CLIENT_ROUTES: RouteObject[] = [
         path: Routes.CONFIRM_EMAIL,
         element: <div>Confirm Email</div>,
       },
-      {
-        path: Routes.FORGOT_PASSWORD,
-        element: <div>Forgot Password</div>,
-      },
     ],
   },
   {
@@ -75,6 +76,14 @@ export const CLIENT_ROUTES: RouteObject[] = [
       {
         path: Routes.REGISTER,
         element: <SignUpPage />,
+      },
+      {
+        path: Routes.FORGOT_PASSWORD,
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: Routes.RESET_PASSWORD,
+        element: <ResetPasswordPage />,
       },
     ],
   },
