@@ -2,6 +2,8 @@ import { RouteObject } from 'react-router-dom';
 
 import { Routes } from '@/enums/routes.enum';
 import {
+  EmailConfirmation,
+  EmailVerification,
   ForgotPasswordPage,
   ResetPasswordPage,
   SignInPage,
@@ -55,10 +57,6 @@ export const CLIENT_ROUTES: RouteObject[] = [
         path: Routes.SUBSCRIPTION,
         element: <div>Subscription</div>,
       },
-      {
-        path: Routes.CONFIRM_EMAIL,
-        element: <div>Confirm Email</div>,
-      },
     ],
   },
   {
@@ -84,6 +82,14 @@ export const CLIENT_ROUTES: RouteObject[] = [
       {
         path: Routes.RESET_PASSWORD,
         element: <ResetPasswordPage />,
+      },
+      {
+        path: Routes.CONFIRM_EMAIL,
+        element: <EmailConfirmation />,
+      },
+      {
+        path: Routes.VERIFY_EMAIL,
+        element: <EmailVerification />,
       },
     ],
   },
