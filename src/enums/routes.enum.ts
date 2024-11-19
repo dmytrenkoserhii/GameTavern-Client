@@ -10,6 +10,7 @@ export enum Routes {
   PROFILE = '/profile',
   SETTINGS = '/settings',
   FORGOT_PASSWORD = '/forgot-password',
+  RESET_PASSWORD = '/reset-password',
   CONFIRM_EMAIL = '/confirm-email',
   LOGIN = '/login',
   REGISTER = '/register',
