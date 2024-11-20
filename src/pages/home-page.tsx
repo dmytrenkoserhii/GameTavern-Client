@@ -7,7 +7,7 @@ import { Button, Container, Group, Image, Paper, Stack, Text } from '@mantine/co
 
 import homeImg from '@/assets/home.png';
 
-export const HomePage = () => {
+const HomePage: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -47,3 +47,5 @@ export const HomePage = () => {
     </Container>
   );
 };
+
+export default HomePage;

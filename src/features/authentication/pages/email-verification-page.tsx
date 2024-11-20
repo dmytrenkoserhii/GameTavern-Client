@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Loader, Stack, Text, Title } from '@mantine/core';
 
-export const EmailVerification: React.FC = () => {
+const EmailVerification: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -20,3 +20,5 @@ export const EmailVerification: React.FC = () => {
     </Stack>
   );
 };
+
+export default EmailVerification;
