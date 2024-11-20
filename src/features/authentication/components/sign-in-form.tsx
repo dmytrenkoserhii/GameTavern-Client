@@ -37,7 +37,7 @@ export const SignInForm: React.FC = () => {
     mutationFn: (signInData: SignInFormData) => AuthService.signIn(signInData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
-      navigate('/');
+      navigate(Routes.HOME);
     },
     onError: (error: Error) => {
       // eslint-disable-next-line no-console

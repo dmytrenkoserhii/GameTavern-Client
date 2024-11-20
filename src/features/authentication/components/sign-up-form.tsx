@@ -22,6 +22,8 @@ import { useForm, zodResolver } from '@mantine/form';
 
 import { useMutation } from '@tanstack/react-query';
 
+import { Routes } from '@/enums/routes.enum';
+
 import { SignUpFormSchema } from '../schemas';
 import { AuthService } from '../services';
 import { SignUpRequestData } from '../types';
@@ -39,14 +41,14 @@ export const SignUpForm: React.FC = () => {
       email: '',
       password: '',
       passwordConfirmation: '',
-      terms: true,
+      terms: false,
     },
   });
 
   const { mutate: signUp } = useMutation({
     mutationFn: (signUpData: SignUpRequestData) => AuthService.signUp(signUpData),
     onSuccess: () => {
-      navigate('/');
+      navigate(Routes.HOME);
     },
     onError: (error: Error) => {
       // eslint-disable-next-line no-console
@@ -57,13 +59,8 @@ export const SignUpForm: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const values = form.values;
-
-    const signUpData = {
-      email: values.email,
-      password: values.password,
-      username: values.username,
-    };
+    const { username, email, password } = form.values;
+    const signUpData = { username, email, password };
 
     signUp(signUpData);
   };
@@ -119,7 +116,7 @@ export const SignUpForm: React.FC = () => {
       </Button>
 
       <Group justify="center" mt="md">
-        <Anchor component={Link} to="/auth/login" size="sm">
+        <Anchor component={Link} to={Routes.LOGIN} size="sm">
           {t('auth.signup.login_link')}
         </Anchor>
       </Group>
