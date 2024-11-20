@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Anchor,
@@ -19,14 +19,31 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { Routes } from '@/enums/routes.enum';
 
 import { SignInFormSchema } from '../schemas';
+import { AuthService } from '../services';
 
 type SignInFormData = z.infer<typeof SignInFormSchema>;
 
 export const SignInForm: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { mutate: signIn } = useMutation({
+    mutationFn: (signInData: SignInFormData) => AuthService.signIn(signInData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      navigate('/');
+    },
+    onError: (error: Error) => {
+      // eslint-disable-next-line no-console
+      console.log(`Error: ${error}`);
+    },
+  });
 
   const form = useForm<SignInFormData>({
     validate: zodResolver(SignInFormSchema),
@@ -36,13 +53,20 @@ export const SignInForm: React.FC = () => {
     },
   });
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const values = form.values;
+
+    signIn(values);
+  };
+
   return (
     <Paper shadow="md" radius="md" p="xl" withBorder w={600}>
       <Title order={2} ta="center" mt="md" mb={50}>
         {t('auth.signin.welcome')}
       </Title>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <Stack gap="md">
           <TextInput
             required
