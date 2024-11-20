@@ -1,16 +1,27 @@
+import React from 'react';
+
 import { RouteObject } from 'react-router-dom';
 
+import { Spinner } from '@/components';
 import { Routes } from '@/enums/routes.enum';
-import {
-  EmailConfirmation,
-  EmailVerification,
-  ForgotPasswordPage,
-  ResetPasswordPage,
-  SignInPage,
-  SignUpPage,
-} from '@/features/authentication';
 import { AuthLayout, UnauthLayout } from '@/layouts';
-import { HomePage, NotFoundPage } from '@/pages';
+import { NotFoundPage } from '@/pages';
+
+const HomePage = React.lazy(() => import('@/pages/home-page'));
+const SignInPage = React.lazy(() => import('@/features/authentication/pages/sign-in-page'));
+const SignUpPage = React.lazy(() => import('@/features/authentication/pages/sign-up-page'));
+const ForgotPasswordPage = React.lazy(
+  () => import('@/features/authentication/pages/forgot-password-page'),
+);
+const ResetPasswordPage = React.lazy(
+  () => import('@/features/authentication/pages/reset-password-page'),
+);
+const EmailConfirmation = React.lazy(
+  () => import('@/features/authentication/pages/email-confirmation-page'),
+);
+const EmailVerification = React.lazy(
+  () => import('@/features/authentication/pages/email-verification-page'),
+);
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
@@ -65,31 +76,59 @@ export const CLIENT_ROUTES: RouteObject[] = [
     children: [
       {
         path: Routes.HOME,
-        element: <HomePage />,
+        element: (
+          <React.Suspense fallback={<Spinner />}>
+            <HomePage />
+          </React.Suspense>
+        ),
       },
       {
         path: Routes.LOGIN,
-        element: <SignInPage />,
+        element: (
+          <React.Suspense fallback={<Spinner />}>
+            <SignInPage />
+          </React.Suspense>
+        ),
       },
       {
         path: Routes.REGISTER,
-        element: <SignUpPage />,
+        element: (
+          <React.Suspense fallback={<Spinner />}>
+            <SignUpPage />
+          </React.Suspense>
+        ),
       },
       {
         path: Routes.FORGOT_PASSWORD,
-        element: <ForgotPasswordPage />,
+        element: (
+          <React.Suspense fallback={<Spinner />}>
+            <ForgotPasswordPage />
+          </React.Suspense>
+        ),
       },
       {
         path: Routes.RESET_PASSWORD,
-        element: <ResetPasswordPage />,
+        element: (
+          <React.Suspense fallback={<Spinner />}>
+            <ResetPasswordPage />
+          </React.Suspense>
+        ),
       },
       {
         path: Routes.CONFIRM_EMAIL,
-        element: <EmailConfirmation />,
+        element: (
+          <React.Suspense fallback={<Spinner />}>
+            <EmailConfirmation />
+          </React.Suspense>
+        ),
       },
       {
         path: Routes.VERIFY_EMAIL,
-        element: <EmailVerification />,
+        element: (
+          <React.Suspense fallback={<Spinner />}>
+            <EmailVerification />
+          </React.Suspense>
+        ),
       },
     ],
   },

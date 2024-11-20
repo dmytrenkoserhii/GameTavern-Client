@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Stack, Text, Title } from '@mantine/core';
 
-export const EmailConfirmation: React.FC = () => {
+const EmailConfirmation: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -19,3 +19,5 @@ export const EmailConfirmation: React.FC = () => {
     </Stack>
   );
 };
+
+export default EmailConfirmation;
