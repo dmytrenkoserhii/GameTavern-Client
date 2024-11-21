@@ -51,5 +51,10 @@ export const theme: ReturnType<typeof createTheme> = createTheme({
         variant: 'filled',
       },
     },
+    Loader: {
+      defaultProps: {
+        type: 'dots',
+      },
+    },
   },
 });
