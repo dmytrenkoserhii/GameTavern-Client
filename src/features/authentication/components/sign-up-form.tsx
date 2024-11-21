@@ -19,6 +19,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 
 import { useMutation } from '@tanstack/react-query';
 
@@ -51,6 +52,11 @@ export const SignUpForm: React.FC = () => {
       navigate(Routes.HOME);
     },
     onError: (error: Error) => {
+      notifications.show({
+        title: t('auth.signup.error_title'),
+        message: error.message,
+        color: 'red',
+      });
       // eslint-disable-next-line no-console
       console.log(`Error: ${error}`);
     },

@@ -18,6 +18,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -40,6 +41,11 @@ export const SignInForm: React.FC = () => {
       navigate(Routes.HOME);
     },
     onError: (error: Error) => {
+      notifications.show({
+        title: t('auth.signin.error_title'),
+        message: t('auth.signin.error_message'),
+        color: 'red',
+      });
       // eslint-disable-next-line no-console
       console.log(`Error: ${error}`);
     },
