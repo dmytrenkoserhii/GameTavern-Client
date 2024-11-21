@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Anchor,
@@ -20,12 +20,19 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 
+import { useMutation } from '@tanstack/react-query';
+
+import { Routes } from '@/enums/routes.enum';
+
 import { SignUpFormSchema } from '../schemas';
+import { AuthService } from '../services';
+import { SignUpRequestData } from '../types';
 
 type SignUpFormData = z.infer<typeof SignUpFormSchema>;
 
 export const SignUpForm: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const form = useForm<SignUpFormData>({
     validate: zodResolver(SignUpFormSchema),
@@ -34,14 +41,29 @@ export const SignUpForm: React.FC = () => {
       email: '',
       password: '',
       passwordConfirmation: '',
-      terms: true,
+      terms: false,
     },
   });
 
-  const handleSubmit = form.onSubmit((values) => {
-    // eslint-disable-next-line no-console
-    console.log(values);
+  const { mutate: signUp } = useMutation({
+    mutationFn: (signUpData: SignUpRequestData) => AuthService.signUp(signUpData),
+    onSuccess: () => {
+      navigate(Routes.HOME);
+    },
+    onError: (error: Error) => {
+      // eslint-disable-next-line no-console
+      console.log(`Error: ${error}`);
+    },
   });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const { username, email, password } = form.values;
+    const signUpData = { username, email, password };
+
+    signUp(signUpData);
+  };
 
   return (
     <Paper shadow="md" radius="md" p="xl" withBorder w={600}>
@@ -94,7 +116,7 @@ export const SignUpForm: React.FC = () => {
       </Button>
 
       <Group justify="center" mt="md">
-        <Anchor component={Link} to="/auth/login" size="sm">
+        <Anchor component={Link} to={Routes.LOGIN} size="sm">
           {t('auth.signup.login_link')}
         </Anchor>
       </Group>
