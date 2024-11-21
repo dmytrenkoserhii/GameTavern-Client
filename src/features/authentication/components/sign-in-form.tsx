@@ -4,7 +4,6 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FcGoogle } from 'react-icons/fc';
-import { IoClose } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom';
 
 import {
@@ -46,7 +45,6 @@ export const SignInForm: React.FC = () => {
         title: t('auth.signin.error_title'),
         message: t('auth.signin.error_message'),
         color: 'red',
-        icon: <IoClose size={16} />,
       });
       // eslint-disable-next-line no-console
       console.log(`Error: ${error}`);

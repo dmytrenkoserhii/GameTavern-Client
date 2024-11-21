@@ -4,7 +4,6 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FcGoogle } from 'react-icons/fc';
-import { IoMdAlert } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 
 import {
@@ -57,7 +56,6 @@ export const SignUpForm: React.FC = () => {
         title: t('auth.signup.error_title'),
         message: error.message,
         color: 'red',
-        icon: <IoMdAlert />,
       });
       // eslint-disable-next-line no-console
       console.log(`Error: ${error}`);
