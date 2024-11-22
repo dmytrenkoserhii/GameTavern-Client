@@ -4,7 +4,8 @@ import { ConfirmEmailRequestData, User } from '../types';
 
 export const UsersService = {
   async getAllUsers() {
-    return privateAxios.get<User[]>('/users');
+    const response = await privateAxios.get<User[]>('/users');
+    return response.data;
   },
   async getCurrentUser() {
     const response = await privateAxios.get<User>('/users/current');

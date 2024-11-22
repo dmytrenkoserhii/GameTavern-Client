@@ -1,5 +1,5 @@
-import { User } from '@/features/users';
-import { publicAxios } from '@/lib';
+import { User } from '@/features/user';
+import { privateAxios, publicAxios } from '@/lib';
 
 import { SignInRequestData, SignUpRequestData } from '../types';
 
@@ -11,6 +11,6 @@ export const AuthService = {
     return publicAxios.post<{ user: User }>('/auth/sign-in', signInData);
   },
   async logout() {
-    return publicAxios.get('/auth/logout');
+    return privateAxios.get('/auth/logout');
   },
 };
