@@ -9,13 +9,18 @@ import { useQuery } from '@tanstack/react-query';
 
 import logo from '@/assets/logo.png';
 import { Routes } from '@/enums/routes.enum';
+import { User, UsersService } from '@/features/user';
 
 import { LanguageSelector } from '../language-selector';
 import { ThemeSelector } from '../theme-selector';
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();
-  const { data: user } = useQuery({ queryKey: ['user'] });
+  const { data: user } = useQuery<User>({
+    queryKey: ['user'],
+    queryFn: () => UsersService.getCurrentUser(),
+    retry: false,
+  });
 
   let headerContent: React.ReactNode;
   if (user) {
@@ -27,7 +32,9 @@ export const Header: React.FC = () => {
   } else {
     headerContent = (
       <Group>
-        <Button>{t('general.sign_in')}</Button>
+        <Button component={Link} to={Routes.LOGIN}>
+          {t('general.sign_in')}
+        </Button>
       </Group>
     );
   }
