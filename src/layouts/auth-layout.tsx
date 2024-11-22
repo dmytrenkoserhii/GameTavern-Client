@@ -8,7 +8,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 
 import { Footer, Header, Navbar } from '@/components';
-import { UsersService } from '@/features/users';
+import { UsersService } from '@/features/user';
 
 export const AuthLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
