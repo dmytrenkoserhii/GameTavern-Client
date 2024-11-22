@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 import { Button, Group, Image, TextInput } from '@mantine/core';
 
+import { useQuery } from '@tanstack/react-query';
+
 import logo from '@/assets/logo.png';
 import { Routes } from '@/enums/routes.enum';
 
@@ -13,7 +15,7 @@ import { ThemeSelector } from '../theme-selector';
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();
-  const user = true;
+  const { data: user } = useQuery({ queryKey: ['user'] });
 
   let headerContent: React.ReactNode;
   if (user) {
