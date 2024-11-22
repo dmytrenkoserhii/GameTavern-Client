@@ -2,7 +2,7 @@ import React from 'react';
 
 import { RouteObject } from 'react-router-dom';
 
-import { Spinner } from '@/components';
+import { Protected, RedirectIfAuthenticated, Spinner } from '@/components';
 import { Routes } from '@/enums/routes.enum';
 import { AuthLayout, UnauthLayout } from '@/layouts';
 import { NotFoundPage } from '@/pages';
@@ -25,48 +25,53 @@ const EmailVerification = React.lazy(
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
-    element: <AuthLayout />,
+    element: <Protected />,
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: Routes.GAMES,
-        element: <div>Games</div>,
-      },
-      {
-        path: `${Routes.GAME}:id`,
-        element: <div>Game</div>,
-      },
-      {
-        path: Routes.LISTS,
-        element: <div>Lists</div>,
-      },
-      {
-        path: `${Routes.LIST}:id`,
-        element: <div>List</div>,
-      },
-      {
-        path: Routes.CREATE_LIST,
-        element: <div>Create List</div>,
-      },
-      {
-        path: Routes.FRIENDS,
-        element: <div>Friends</div>,
-      },
-      {
-        path: Routes.MESSAGES,
-        element: <div>Messages</div>,
-      },
-      {
-        path: Routes.PROFILE,
-        element: <div>Profile</div>,
-      },
-      {
-        path: Routes.SETTINGS,
-        element: <div>Settings</div>,
-      },
-      {
-        path: Routes.SUBSCRIPTION,
-        element: <div>Subscription</div>,
+        element: <AuthLayout />,
+        children: [
+          {
+            path: Routes.GAMES,
+            element: <div>Games</div>,
+          },
+          {
+            path: `${Routes.GAME}:id`,
+            element: <div>Game</div>,
+          },
+          {
+            path: Routes.LISTS,
+            element: <div>Lists</div>,
+          },
+          {
+            path: `${Routes.LIST}:id`,
+            element: <div>List</div>,
+          },
+          {
+            path: Routes.CREATE_LIST,
+            element: <div>Create List</div>,
+          },
+          {
+            path: Routes.FRIENDS,
+            element: <div>Friends</div>,
+          },
+          {
+            path: Routes.MESSAGES,
+            element: <div>Messages</div>,
+          },
+          {
+            path: Routes.PROFILE,
+            element: <div>Profile</div>,
+          },
+          {
+            path: Routes.SETTINGS,
+            element: <div>Settings</div>,
+          },
+          {
+            path: Routes.SUBSCRIPTION,
+            element: <div>Subscription</div>,
+          },
+        ],
       },
     ],
   },
@@ -83,20 +88,25 @@ export const CLIENT_ROUTES: RouteObject[] = [
         ),
       },
       {
-        path: Routes.LOGIN,
-        element: (
-          <React.Suspense fallback={<Spinner />}>
-            <SignInPage />
-          </React.Suspense>
-        ),
-      },
-      {
-        path: Routes.REGISTER,
-        element: (
-          <React.Suspense fallback={<Spinner />}>
-            <SignUpPage />
-          </React.Suspense>
-        ),
+        element: <RedirectIfAuthenticated />,
+        children: [
+          {
+            path: Routes.LOGIN,
+            element: (
+              <React.Suspense fallback={<Spinner />}>
+                <SignInPage />
+              </React.Suspense>
+            ),
+          },
+          {
+            path: Routes.REGISTER,
+            element: (
+              <React.Suspense fallback={<Spinner />}>
+                <SignUpPage />
+              </React.Suspense>
+            ),
+          },
+        ],
       },
       {
         path: Routes.FORGOT_PASSWORD,

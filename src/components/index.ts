@@ -3,3 +3,4 @@ export { Footer } from './layout/footer';
 export { Navbar } from './layout/navbar';
 export { LanguageSelector } from './language-selector';
 export { Spinner } from './spinner';
+export { Protected, RedirectIfAuthenticated } from './guards';

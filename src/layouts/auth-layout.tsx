@@ -5,19 +5,10 @@ import { Outlet } from 'react-router-dom';
 import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
-import { useQuery } from '@tanstack/react-query';
-
 import { Footer, Header, Navbar } from '@/components';
-import { UsersService } from '@/features/user';
 
 export const AuthLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
-
-  useQuery({
-    queryKey: ['user'],
-    queryFn: () => UsersService.getCurrentUser(),
-    retry: false,
-  });
 
   return (
     <AppShell
