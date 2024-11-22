@@ -7,7 +7,7 @@ import { AppShell, Group } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { Footer, Header } from '@/components';
-import { UsersService } from '@/features/users';
+import { UsersService } from '@/features/user';
 
 export const UnauthLayout: React.FC = () => {
   useQuery({

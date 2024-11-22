@@ -59,12 +59,9 @@ export const SignInForm: React.FC = () => {
     },
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const values = form.values;
-
+  const handleSubmit = form.onSubmit((values) => {
     signIn(values);
-  };
+  });
 
   return (
     <Paper shadow="md" radius="md" p="xl" withBorder w={600}>
@@ -75,14 +72,12 @@ export const SignInForm: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <Stack gap="md">
           <TextInput
-            required
             label={t('auth.signin.email_label')}
             placeholder={t('auth.signin.email_placeholder')}
             {...form.getInputProps('email')}
           />
 
           <PasswordInput
-            required
             label={t('auth.signin.password_label')}
             placeholder={t('auth.signin.password_placeholder')}
             {...form.getInputProps('password')}

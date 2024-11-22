@@ -62,14 +62,11 @@ export const SignUpForm: React.FC = () => {
     },
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const { username, email, password } = form.values;
+  const handleSubmit = form.onSubmit((values) => {
+    const { username, email, password } = values;
     const signUpData = { username, email, password };
-
     signUp(signUpData);
-  };
+  });
 
   return (
     <Paper shadow="md" radius="md" p="xl" withBorder w={600}>
