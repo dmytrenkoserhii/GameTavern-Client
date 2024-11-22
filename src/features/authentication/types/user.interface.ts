@@ -12,6 +12,7 @@ export interface User {
   isEmailVerified: boolean;
   resetPasswordToken: string | null;
   resetPasswordTokenExpiresAt: Date | null;
+  isPremium: boolean;
   createdAt: Date;
   updatedAt: Date;
   account: Account;

@@ -22,6 +22,7 @@ const EmailConfirmation = React.lazy(
 const EmailVerification = React.lazy(
   () => import('@/features/authentication/pages/email-verification-page'),
 );
+const SubscriptionPage = React.lazy(() => import('@/features/payments/pages/subscription-page'));
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
@@ -66,7 +67,11 @@ export const CLIENT_ROUTES: RouteObject[] = [
       },
       {
         path: Routes.SUBSCRIPTION,
-        element: <div>Subscription</div>,
+        element: (
+          <React.Suspense fallback={<Spinner />}>
+            <SubscriptionPage />
+          </React.Suspense>
+        ),
       },
     ],
   },
