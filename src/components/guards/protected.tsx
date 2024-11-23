@@ -8,7 +8,12 @@ import { User, UsersService } from '@/features/user';
 
 import { Spinner } from '../spinner';
 
-export const Protected: React.FC<{ roles?: Role[] }> = ({ roles }) => {
+interface ProtectedProps {
+  roles?: Role[];
+  isPremium?: boolean;
+}
+
+export const Protected: React.FC<ProtectedProps> = ({ roles, isPremium }) => {
   const { data: user, isLoading } = useQuery<User>({
     queryKey: ['user'],
     queryFn: () => UsersService.getCurrentUser(),
@@ -25,6 +30,10 @@ export const Protected: React.FC<{ roles?: Role[] }> = ({ roles }) => {
 
   if (roles && !roles.includes(user.role)) {
     return <Navigate to={Routes.HOME} />;
+  }
+
+  if (isPremium && !user.isPremium) {
+    return <Navigate to={Routes.SUBSCRIPTION} />;
   }
 
   return <Outlet />;

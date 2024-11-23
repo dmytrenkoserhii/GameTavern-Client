@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FcGoogle } from 'react-icons/fc';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
   Anchor,
@@ -31,14 +31,12 @@ type SignInFormData = z.infer<typeof SignInFormSchema>;
 
 export const SignInForm: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { mutate: signIn } = useMutation({
     mutationFn: (signInData: SignInFormData) => AuthService.signIn(signInData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
-      navigate(Routes.HOME);
     },
     onError: (error: Error) => {
       notifications.show({

@@ -4,4 +4,5 @@ export interface NavbarLink {
   to: Routes;
   translationLabel: string;
   icon: React.ReactNode;
+  isPremium?: boolean;
 }

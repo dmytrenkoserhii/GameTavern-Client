@@ -22,6 +22,7 @@ const EmailConfirmation = React.lazy(
 const EmailVerification = React.lazy(
   () => import('@/features/authentication/pages/email-verification-page'),
 );
+const SubscriptionPage = React.lazy(() => import('@/features/payments/pages/subscription-page'));
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
@@ -53,11 +54,23 @@ export const CLIENT_ROUTES: RouteObject[] = [
           },
           {
             path: Routes.FRIENDS,
-            element: <div>Friends</div>,
+            element: <Protected isPremium />,
+            children: [
+              {
+                path: Routes.FRIENDS,
+                element: <div>Friends</div>,
+              },
+            ],
           },
           {
             path: Routes.MESSAGES,
-            element: <div>Messages</div>,
+            element: <Protected isPremium />,
+            children: [
+              {
+                path: Routes.MESSAGES,
+                element: <div>Messages</div>,
+              },
+            ],
           },
           {
             path: Routes.PROFILE,
@@ -69,7 +82,11 @@ export const CLIENT_ROUTES: RouteObject[] = [
           },
           {
             path: Routes.SUBSCRIPTION,
-            element: <div>Subscription</div>,
+            element: (
+              <React.Suspense fallback={<Spinner />}>
+                <SubscriptionPage />
+              </React.Suspense>
+            ),
           },
         ],
       },

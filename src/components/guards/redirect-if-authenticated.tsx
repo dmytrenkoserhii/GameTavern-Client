@@ -20,5 +20,5 @@ export const RedirectIfAuthenticated: React.FC = () => {
     return <Spinner />;
   }
 
-  return user ? <Navigate to={Routes.HOME} replace /> : <Outlet />;
+  return user ? <Navigate to={Routes.LISTS} replace /> : <Outlet />;
 };

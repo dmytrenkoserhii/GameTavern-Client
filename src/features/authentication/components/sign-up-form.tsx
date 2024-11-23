@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FcGoogle } from 'react-icons/fc';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
   Anchor,
@@ -21,7 +21,7 @@ import {
 import { useForm, zodResolver } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Routes } from '@/enums/routes.enum';
 
@@ -33,7 +33,7 @@ type SignUpFormData = z.infer<typeof SignUpFormSchema>;
 
 export const SignUpForm: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const form = useForm<SignUpFormData>({
     validate: zodResolver(SignUpFormSchema),
@@ -49,7 +49,7 @@ export const SignUpForm: React.FC = () => {
   const { mutate: signUp } = useMutation({
     mutationFn: (signUpData: SignUpRequestData) => AuthService.signUp(signUpData),
     onSuccess: () => {
-      navigate(Routes.HOME);
+      queryClient.invalidateQueries({ queryKey: ['user'] });
     },
     onError: (error: Error) => {
       notifications.show({
