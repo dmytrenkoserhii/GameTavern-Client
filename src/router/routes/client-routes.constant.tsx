@@ -54,11 +54,23 @@ export const CLIENT_ROUTES: RouteObject[] = [
           },
           {
             path: Routes.FRIENDS,
-            element: <div>Friends</div>,
+            element: <Protected isPremium />,
+            children: [
+              {
+                path: Routes.FRIENDS,
+                element: <div>Friends</div>,
+              },
+            ],
           },
           {
             path: Routes.MESSAGES,
-            element: <div>Messages</div>,
+            element: <Protected isPremium />,
+            children: [
+              {
+                path: Routes.MESSAGES,
+                element: <div>Messages</div>,
+              },
+            ],
           },
           {
             path: Routes.PROFILE,
