@@ -24,6 +24,7 @@ const EmailVerification = React.lazy(
 );
 const SubscriptionPage = React.lazy(() => import('@/features/payments/pages/subscription-page'));
 const ListsPage = React.lazy(() => import('@/features/lists/pages/lists-page'));
+const ListPage = React.lazy(() => import('@/features/lists/pages/list-page'));
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
@@ -51,7 +52,11 @@ export const CLIENT_ROUTES: RouteObject[] = [
           },
           {
             path: `${Routes.LIST}:id`,
-            element: <div>List</div>,
+            element: (
+              <React.Suspense fallback={<Spinner />}>
+                <ListPage />
+              </React.Suspense>
+            ),
           },
           {
             path: Routes.CREATE_LIST,
