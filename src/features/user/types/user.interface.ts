@@ -1,5 +1,4 @@
-import { Role } from '@/features/authentication';
-
+import { Role } from '../enums';
 import { Account } from './account.interface';
 
 export interface User {

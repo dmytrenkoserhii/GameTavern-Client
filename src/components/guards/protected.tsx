@@ -3,8 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 import { Routes } from '@/enums';
-import { Role } from '@/features/authentication';
-import { User, UsersService } from '@/features/user';
+import { Role, User, UsersService } from '@/features/user';
 
 import { Spinner } from '../spinner';
 
