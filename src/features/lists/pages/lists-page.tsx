@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { Button, Divider, Group, Text } from '@mantine/core';
+import { Box, Button, Divider, Text } from '@mantine/core';
 
 import { ViewMode } from '@/types';
 
@@ -28,23 +28,23 @@ const ListsPage: React.FC = () => {
 
   return (
     <>
-      <Group mb="md">
+      <Box mb="md">
         <Button variant="filled">{t('lists.create_list')}</Button>
-      </Group>
-      <Group mb="xs" style={{ '--group-justify': 'space-between', '--group-width': '100%' }}>
+      </Box>
+      <Box mb="xs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
         <Text>
           {listCount} {/*Lists*/}
         </Text>
         <DisplayModeSelector value={viewMode} onChange={(value) => setViewMode(value)} />
-      </Group>
+      </Box>
       <Divider mb="md" />
-      <div>
+      <Box>
         {viewMode === 'list' ? (
           <ListsItemView lists={testLists} onListClick={handleListClick} />
         ) : (
           <ListCardView lists={testLists} onListClick={handleListClick} />
         )}
-      </div>
+      </Box>
     </>
   );
 };

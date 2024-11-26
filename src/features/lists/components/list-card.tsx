@@ -1,13 +1,13 @@
 import { Card, Group, Stack, Text } from '@mantine/core';
 
+import { List } from '../types';
+
 interface ListCardProps {
-  title: string;
-  gamesCount: number;
-  //   gameCover: string;
-  onClick?: () => void;
+  list: List;
+  onClick: () => void;
 }
 
-export const ListCard: React.FC<ListCardProps> = ({ title, gamesCount, onClick }) => {
+export const ListCard: React.FC<ListCardProps> = ({ list, onClick }) => {
   return (
     <Card
       shadow="sm"
@@ -15,7 +15,7 @@ export const ListCard: React.FC<ListCardProps> = ({ title, gamesCount, onClick }
       radius="md"
       withBorder
       onClick={onClick}
-      style={{ cursor: onClick ? 'pointer' : 'default' }}
+      style={{ cursor: 'pointer' }}
     >
       <Card.Section p="md">
         <Group gap="sm" justify="space-between" grow>
@@ -35,10 +35,10 @@ export const ListCard: React.FC<ListCardProps> = ({ title, gamesCount, onClick }
 
       <Stack gap={4} mt="sm">
         <Text fw={700} size="lg" lineClamp={1}>
-          {title}
+          {list.title}
         </Text>
         <Text c="dimmed" size="sm">
-          {gamesCount} {/*Games*/}
+          {list.gamesCount} {/*Games*/}
         </Text>
       </Stack>
     </Card>
