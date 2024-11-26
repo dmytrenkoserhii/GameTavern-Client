@@ -1,11 +1,9 @@
 import { Group, Paper, Text } from '@mantine/core';
 
+import { Game } from '../types';
+
 interface GameItemProps {
-  game: {
-    id: number;
-    name: string;
-    description: string;
-  };
+  game: Game;
   onClick: () => void;
 }
 

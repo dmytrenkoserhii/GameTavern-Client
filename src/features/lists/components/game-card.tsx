@@ -1,14 +1,9 @@
 import { Card, Stack, Text } from '@mantine/core';
 
+import { Game } from '../types';
+
 interface GameCardProps {
-  game: {
-    id: number;
-    name: string;
-    description: string;
-    image: {
-      medium_url: string;
-    };
-  };
+  game: Game;
   onClick: () => void;
 }
 

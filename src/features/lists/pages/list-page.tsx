@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { Box, Button, Divider, Text } from '@mantine/core';
 
 import { ViewMode } from '@/types';
@@ -90,6 +92,7 @@ const testGames = [
 ];
 
 const ListPage: React.FC = () => {
+  const { t } = useTranslation();
   const [viewMode, setViewMode] = useState<ViewMode>('card');
   const listName = 'Completed';
   const listDescription = 'A collection of completed games.';
@@ -103,7 +106,7 @@ const ListPage: React.FC = () => {
             {listName}
           </Text>
           <Button variant="outline" style={{ marginLeft: '10px' }}>
-            Edit List
+            {t('lists.edit_list_button')}
           </Button>
         </Box>
 
