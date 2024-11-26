@@ -23,11 +23,13 @@ export const NAVBAR_LINKS: NavbarLink[] = [
     to: Routes.FRIENDS,
     translationLabel: 'navbar.friends_link',
     icon: <MdGroups />,
+    isPremium: true,
   },
   {
     to: Routes.MESSAGES,
     translationLabel: 'navbar.messages_link',
     icon: <BsChatDots />,
+    isPremium: true,
   },
   {
     to: Routes.PROFILE,
