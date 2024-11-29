@@ -6,7 +6,10 @@ export enum Routes {
   LIST = '/lists/',
   CREATE_LIST = '/create-list',
   FRIENDS = '/friends',
-  MESSAGES = '/messages',
+  FRIEND = '/friends/',
+  CHATS = '/chats',
+  CHAT = '/chats/',
+  GUILD = '/guild',
   PROFILE = '/profile',
   SETTINGS = '/settings',
   FORGOT_PASSWORD = '/forgot-password',
@@ -20,3 +23,5 @@ export enum Routes {
 
 export const getGameRoute = (id: string) => `${Routes.GAME}${id}`;
 export const getListRoute = (id: string) => `${Routes.LIST}${id}`;
+export const getFriendRoute = (id: string) => `${Routes.FRIEND}${id}`;
+export const getChatRoute = (id: string) => `${Routes.CHAT}${id}`;

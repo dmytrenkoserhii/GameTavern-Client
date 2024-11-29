@@ -4,6 +4,7 @@ import { RouteObject } from 'react-router-dom';
 
 import { Protected, RedirectIfAuthenticated, Spinner } from '@/components';
 import { Routes } from '@/enums/routes.enum';
+import { ChatsLayout } from '@/features/messages';
 import { AuthLayout, UnauthLayout } from '@/layouts';
 import { NotFoundPage } from '@/pages';
 
@@ -23,6 +24,10 @@ const EmailVerification = React.lazy(
   () => import('@/features/authentication/pages/email-verification-page'),
 );
 const SubscriptionPage = React.lazy(() => import('@/features/payments/pages/subscription-page'));
+const ChatsPage = React.lazy(() => import('@/features/messages/pages/chats-page'));
+const ChatPage = React.lazy(() => import('@/features/messages/pages/chat-page'));
+const FriendsPage = React.lazy(() => import('@/features/friends/pages/friends-page'));
+const FriendPage = React.lazy(() => import('@/features/friends/pages/friend-page'));
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
@@ -58,17 +63,63 @@ export const CLIENT_ROUTES: RouteObject[] = [
             children: [
               {
                 path: Routes.FRIENDS,
-                element: <div>Friends</div>,
+                element: (
+                  <React.Suspense fallback={<Spinner />}>
+                    <FriendsPage />
+                  </React.Suspense>
+                ),
+              },
+              {
+                path: `${Routes.FRIEND}:id`,
+                element: (
+                  <React.Suspense fallback={<Spinner />}>
+                    <FriendPage />
+                  </React.Suspense>
+                ),
               },
             ],
           },
           {
-            path: Routes.MESSAGES,
+            path: Routes.CHATS,
             element: <Protected isPremium />,
             children: [
               {
-                path: Routes.MESSAGES,
-                element: <div>Messages</div>,
+                path: Routes.CHATS,
+                element: (
+                  <React.Suspense fallback={<Spinner />}>
+                    <ChatsPage />
+                  </React.Suspense>
+                ),
+              },
+              {
+                element: <ChatsLayout />,
+                children: [
+                  {
+                    path: `${Routes.CHAT}:id`,
+                    element: (
+                      <React.Suspense fallback={<Spinner />}>
+                        <ChatPage />
+                      </React.Suspense>
+                    ),
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: Routes.GUILD,
+            element: <Protected isPremium />,
+            children: [
+              {
+                path: Routes.GUILD,
+                element: (
+                  <React.Suspense fallback={<Spinner />}>
+                    <div>
+                      I want to have a guild. It's like a group chat with some advanced features and
+                      rewards.
+                    </div>
+                  </React.Suspense>
+                ),
               },
             ],
           },

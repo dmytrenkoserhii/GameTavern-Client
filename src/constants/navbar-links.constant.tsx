@@ -1,6 +1,6 @@
 import { BsChatDots } from 'react-icons/bs';
 import { FaGamepad, FaUser } from 'react-icons/fa';
-import { GiScrollUnfurled } from 'react-icons/gi';
+import { GiCastle, GiScrollUnfurled } from 'react-icons/gi';
 import { IoMdSettings } from 'react-icons/io';
 import { MdGroups } from 'react-icons/md';
 import { RiHandCoinFill } from 'react-icons/ri';
@@ -26,9 +26,15 @@ export const NAVBAR_LINKS: NavbarLink[] = [
     isPremium: true,
   },
   {
-    to: Routes.MESSAGES,
-    translationLabel: 'navbar.messages_link',
+    to: Routes.CHATS,
+    translationLabel: 'navbar.chats_link',
     icon: <BsChatDots />,
+    isPremium: true,
+  },
+  {
+    to: Routes.GUILD,
+    translationLabel: 'navbar.guild_link',
+    icon: <GiCastle />,
     isPremium: true,
   },
   {

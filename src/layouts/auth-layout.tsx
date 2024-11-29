@@ -6,9 +6,11 @@ import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 import { Footer, Header, Navbar } from '@/components';
+import { GlobalChat, GlobalChatButton } from '@/features/messages';
 
 export const AuthLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
+  const [globalChatOpened, { toggle: toggleGlobalChat }] = useDisclosure();
 
   return (
     <AppShell
@@ -32,6 +34,8 @@ export const AuthLayout: React.FC = () => {
       <AppShell.Footer p="md">
         <Footer />
       </AppShell.Footer>
+      <GlobalChatButton toggleChat={toggleGlobalChat} />
+      <GlobalChat opened={globalChatOpened} messages={[]} />
     </AppShell>
   );
 };

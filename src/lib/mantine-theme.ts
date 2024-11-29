@@ -51,6 +51,11 @@ export const theme: ReturnType<typeof createTheme> = createTheme({
         variant: 'filled',
       },
     },
+    ActionIcon: {
+      defaultProps: {
+        color: 'primary',
+      },
+    },
     Loader: {
       defaultProps: {
         type: 'dots',
