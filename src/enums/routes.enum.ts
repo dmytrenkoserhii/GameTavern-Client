@@ -21,7 +21,7 @@ export enum Routes {
   SUBSCRIPTION = '/subscription',
 }
 
-export const getGameRoute = (id: string) => `${Routes.GAME}${id}`;
-export const getListRoute = (id: string) => `${Routes.LIST}${id}`;
-export const getFriendRoute = (id: string) => `${Routes.FRIEND}${id}`;
-export const getChatRoute = (id: string) => `${Routes.CHAT}${id}`;
+export const getGameRoute = (id: number) => `${Routes.GAME}${id}`;
+export const getListRoute = (id: number) => `${Routes.LIST}${id}`;
+export const getFriendRoute = (id: number) => `${Routes.FRIEND}${id}`;
+export const getChatRoute = (id: number) => `${Routes.CHAT}${id}`;

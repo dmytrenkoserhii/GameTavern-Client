@@ -7,10 +7,33 @@ import { useDisclosure } from '@mantine/hooks';
 
 import { Footer, Header, Navbar } from '@/components';
 import { GlobalChat, GlobalChatButton } from '@/features/messages';
+import { getGlobalChatSocket } from '@/lib/global-chat-socket';
+
+const socket = getGlobalChatSocket();
 
 export const AuthLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
   const [globalChatOpened, { toggle: toggleGlobalChat }] = useDisclosure();
+  const [hasNewMessages, setHasNewMessages] = React.useState(false);
+
+  const onNewMessage = () => {
+    if (!globalChatOpened) {
+      setHasNewMessages(true);
+    }
+  };
+
+  React.useEffect(() => {
+    socket.on('new_global_message', onNewMessage);
+
+    return () => {
+      socket.off('new_global_message', onNewMessage);
+    };
+  }, []);
+
+  const handleToggleGlobalChat = () => {
+    setHasNewMessages(false);
+    toggleGlobalChat();
+  };
 
   return (
     <AppShell
@@ -34,7 +57,11 @@ export const AuthLayout: React.FC = () => {
       <AppShell.Footer p="md">
         <Footer />
       </AppShell.Footer>
-      <GlobalChatButton toggleChat={toggleGlobalChat} />
+      <GlobalChatButton
+        toggleChat={handleToggleGlobalChat}
+        isOpen={globalChatOpened}
+        hasNewMessages={hasNewMessages}
+      />
       <GlobalChat opened={globalChatOpened} messages={[]} />
     </AppShell>
   );

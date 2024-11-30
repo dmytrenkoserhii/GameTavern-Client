@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import { IoIosSend } from 'react-icons/io';
 
 import { Button, Group, TextInput } from '@mantine/core';
@@ -11,6 +12,8 @@ interface GlobalChatFormProps {
 }
 
 export const GlobalChatForm = ({ sendMessage, isLoading }: GlobalChatFormProps) => {
+  const { t } = useTranslation();
+
   const field = useField({
     initialValue: '',
     validate: (value) => (value.trim().length === 0 ? 'Message cannot be empty' : null),
@@ -41,7 +44,7 @@ export const GlobalChatForm = ({ sendMessage, isLoading }: GlobalChatFormProps) 
           <TextInput
             style={{ flex: 1 }}
             {...field.getInputProps()}
-            placeholder="Type your message"
+            placeholder={t('global_chat.message_placeholder')}
             disabled={isLoading}
             error={false}
           />

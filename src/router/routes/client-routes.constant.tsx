@@ -129,7 +129,13 @@ export const CLIENT_ROUTES: RouteObject[] = [
           },
           {
             path: Routes.SETTINGS,
-            element: <div>Settings</div>,
+            element: (
+              <div>
+                <ul>
+                  <li>Global Chat On/Off</li>
+                </ul>
+              </div>
+            ),
           },
           {
             path: Routes.SUBSCRIPTION,

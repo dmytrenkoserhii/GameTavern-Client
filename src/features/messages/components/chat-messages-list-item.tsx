@@ -48,7 +48,7 @@ export const ChatMessagesListItem = ({
           borderTopRightRadius: isCurrentUser ? 4 : 16,
           borderTopLeftRadius: isCurrentUser ? 16 : 4,
         }}
-        bg={isCurrentUser ? 'secondary' : 'dark.5'}
+        bg={isCurrentUser ? 'secondary.8' : 'dark.5'}
       >
         <Text c={isCurrentUser ? 'white' : 'gray.3'}>{message}</Text>
       </Paper>
