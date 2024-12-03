@@ -4,19 +4,11 @@ import { List } from '../types';
 
 interface ListCardProps {
   list: List;
-  onClick: () => void;
 }
 
-export const ListCard: React.FC<ListCardProps> = ({ list, onClick }) => {
+export const ListCard: React.FC<ListCardProps> = ({ list }) => {
   return (
-    <Card
-      shadow="sm"
-      padding="lg"
-      radius="md"
-      withBorder
-      onClick={onClick}
-      style={{ cursor: 'pointer' }}
-    >
+    <Card shadow="sm" padding="lg" radius="md" withBorder style={{ cursor: 'pointer' }}>
       <Card.Section p="md">
         <Group gap="sm" justify="space-between" grow>
           {[1, 2, 3, 4].map((_, index) => (
@@ -35,10 +27,10 @@ export const ListCard: React.FC<ListCardProps> = ({ list, onClick }) => {
 
       <Stack gap={4} mt="sm">
         <Text fw={700} size="lg" lineClamp={1}>
-          {list.title}
+          {list.name}
         </Text>
         <Text c="dimmed" size="sm">
-          {list.gamesCount} {/*Games*/}
+          {list.games.length} {/*Games*/}
         </Text>
       </Stack>
     </Card>
