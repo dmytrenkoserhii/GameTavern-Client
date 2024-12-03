@@ -1,5 +1,10 @@
+import { Game } from './game.interface';
+
 export interface List {
   id: number;
-  title: string;
-  gamesCount?: number;
+  name: string;
+  description: string;
+  createdAt: Date;
+  updatedAt: Date;
+  games: Game[];
 }

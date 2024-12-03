@@ -5,23 +5,26 @@ import { useTranslation } from 'react-i18next';
 import { Button, Drawer, Select } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
-import { GenerateReleaseYearOptions } from '@/utils';
+import { generateYearsOptions } from '@/utils';
 
-interface FilterBarData {
+interface FilterListRightBarData {
   releaseYear: string;
 }
 
-interface FilterBarProps {
+interface FilterListRightBarProps {
   queryParams: { [key: string]: string };
-  onFilterChange: (data: FilterBarData) => void;
+  onFilterChange: (data: FilterListRightBarData) => void;
 }
 
-const RELEASE_YEAR_OPTIONS = GenerateReleaseYearOptions(2010);
+const RELEASE_YEAR_OPTIONS = generateYearsOptions(2010);
 
-export const FilterBar: React.FC<FilterBarProps> = ({ queryParams, onFilterChange }) => {
+export const FilterListRightBar: React.FC<FilterListRightBarProps> = ({
+  queryParams,
+  onFilterChange,
+}) => {
   const { t } = useTranslation();
 
-  const form = useForm<FilterBarData>({
+  const form = useForm<FilterListRightBarData>({
     initialValues: {
       releaseYear: '',
     },
@@ -37,34 +40,31 @@ export const FilterBar: React.FC<FilterBarProps> = ({ queryParams, onFilterChang
     }
   }, [queryParams, form]);
 
-  function onSubmit(data: FilterBarData) {
+  function onSubmit(data: FilterListRightBarData) {
     onFilterChange(data);
     setOpened(false);
   }
 
   return (
     <>
-      <Button onClick={() => setOpened(true)}>{t('filter_bar.button_text')}</Button>
+      <Button onClick={() => setOpened(true)}>{t('lists.filter_bar.filter_button')}</Button>
       <Drawer
         opened={opened}
         onClose={() => setOpened(false)}
-        title={t('filter_bar.drawer_title')}
+        title={t('lists.filter_bar.drawer_title')}
         padding="xl"
         size="xl"
         position="right"
       >
         <form onSubmit={form.onSubmit(onSubmit)}>
           <Select
-            label={t('filter_bar.release_year.label')}
-            placeholder={t('filter_bar.release_year.placeholder')}
-            data={RELEASE_YEAR_OPTIONS.map((option) => ({
-              value: option.value,
-              label: option.label,
-            }))}
+            label={t('lists.filter_bar.release_year.label')}
+            placeholder={t('lists.filter_bar.release_year.placeholder')}
+            data={RELEASE_YEAR_OPTIONS}
             {...form.getInputProps('releaseYear')}
           />
           <Button type="submit" mt="md">
-            {t('filter_bar.save_button_text')}
+            {t('general.save_changes')}
           </Button>
         </form>
       </Drawer>

@@ -14,7 +14,6 @@ export const GameItem: React.FC<GameItemProps> = ({ game, onClick }) => {
         <Text size="md" fw={500}>
           {game.name}
         </Text>
-        <Text size="sm">{game.description}</Text>
       </Group>
     </Paper>
   );

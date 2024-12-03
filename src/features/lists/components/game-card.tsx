@@ -15,7 +15,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game }) => {
         <Text fw={700} size="lg">
           {game.name}
         </Text>
-        <Text size="sm">{game.description}</Text>
       </Stack>
     </Card>
   );

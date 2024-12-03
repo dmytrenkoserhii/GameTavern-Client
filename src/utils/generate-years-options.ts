@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 
-export const GenerateReleaseYearOptions = (startYear: number) => {
+import { SelectItem } from '@/types';
+
+export const generateYearsOptions = (startYear: number): SelectItem[] => {
   const currentYear = dayjs().year();
   const releaseYearOptions = [];
 

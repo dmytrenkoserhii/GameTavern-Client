@@ -7,15 +7,14 @@ import classes from './list-item.module.css';
 
 interface ListItemProps {
   list: List;
-  onClick: () => void;
 }
 
-export const ListItem: React.FC<ListItemProps> = ({ list, onClick }) => {
+export const ListItem: React.FC<ListItemProps> = ({ list }) => {
   return (
-    <Paper shadow="xs" p="md" withBorder onClick={onClick} className={classes.item}>
+    <Paper shadow="xs" p="md" withBorder className={classes.item}>
       <Group>
         <Text size="md" fw={500}>
-          {list.title}
+          {list.name}
         </Text>
       </Group>
     </Paper>
