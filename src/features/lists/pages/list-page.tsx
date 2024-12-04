@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import { z } from 'zod';
+
+import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { Box, Button, Divider, Select, Text } from '@mantine/core';
+import { Box, Button, Divider, Select, Text, TextInput, Textarea } from '@mantine/core';
+import { useForm, zodResolver } from '@mantine/form';
 
 import { DUMMY_API_GAMES, DUMMY_LISTS } from '@/DUMMY_DATA';
 import { ViewMode } from '@/types';
@@ -16,19 +19,43 @@ import {
   GamesItemView,
 } from '../components';
 import { SORT_GAMES_OPTIONS } from '../constants';
+import { listFormSchema } from '../schemas';
 import { ListFilterData } from '../types';
+
+type ListForm = z.infer<typeof listFormSchema>;
 
 const ListPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isEditing, setIsEditing] = React.useState(false);
 
   const queryParams = React.useMemo(() => {
     return getCurrentQueryParams(searchParams);
   }, [searchParams]);
 
   const { t } = useTranslation();
-  const [viewMode, setViewMode] = useState<ViewMode>('card');
+  const [viewMode, setViewMode] = React.useState<ViewMode>('card');
   const currentList = DUMMY_LISTS.find((list) => list.id === Number(id));
+
+  const form = useForm<ListForm>({
+    initialValues: {
+      name: currentList?.name || '',
+      description: currentList?.description || '',
+    },
+    validate: zodResolver(listFormSchema),
+  });
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      setIsEditing(false);
+    } else {
+      form.setValues({
+        name: currentList?.name || '',
+        description: currentList?.description || '',
+      });
+      setIsEditing(true);
+    }
+  };
 
   React.useEffect(() => {
     if (!queryParams.sort) {
@@ -74,15 +101,40 @@ const ListPage: React.FC = () => {
     <>
       <Box mb="md">
         <Box mb="xs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-          <Text size="xl" fw={700}>
-            {currentList?.name}
-          </Text>
-          <Button variant="outline" style={{ marginLeft: '10px' }}>
-            {t('lists.edit_list_button')}
+          <Box style={{ maxWidth: '50%' }}>
+            {isEditing ? (
+              <TextInput
+                {...form.getInputProps('name')}
+                size="lg"
+                placeholder={t('lists.name_placeholder')}
+              />
+            ) : (
+              <Text size="xl" fw={700}>
+                {currentList?.name}
+              </Text>
+            )}
+          </Box>
+          <Button
+            variant="outline"
+            w={180}
+            style={{ marginLeft: '10px' }}
+            onClick={handleEditToggle}
+          >
+            {t(isEditing ? 'general.save_changes' : 'lists.edit_list_button')}
           </Button>
         </Box>
 
-        <Text>{currentList?.description}</Text>
+        <Box style={{ maxWidth: '50%' }}>
+          {isEditing ? (
+            <Textarea
+              {...form.getInputProps('description')}
+              minRows={2}
+              placeholder={t('lists.description_placeholder')}
+            />
+          ) : (
+            <Text>{currentList?.description}</Text>
+          )}
+        </Box>
       </Box>
       <Box mb="xs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
         <Text>
