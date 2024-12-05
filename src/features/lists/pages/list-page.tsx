@@ -20,7 +20,7 @@ import {
 } from '../components';
 import { SORT_GAMES_OPTIONS } from '../constants';
 import { listFormSchema } from '../schemas';
-import { FilterListRightBarData, ListQueryParams } from '../types';
+import { ListQueryParams } from '../types';
 
 type ListForm = z.infer<typeof listFormSchema>;
 
@@ -59,11 +59,7 @@ const ListPage: React.FC = () => {
     }
   }, [queryParams.sort, updateQueryParams]);
 
-  const handleParamsChange = (key: string, value: string) => {
-    updateQueryParams({ [key]: value });
-  };
-
-  const handleFilterChange = (data: Partial<FilterListRightBarData>) => {
+  const handleParamsChange = (data: ListQueryParams) => {
     updateQueryParams(data);
   };
 
@@ -114,10 +110,10 @@ const ListPage: React.FC = () => {
           <Select
             data={SORT_GAMES_OPTIONS}
             value={queryParams.sort}
-            onChange={(newValue) => newValue && handleParamsChange('sort', newValue)}
+            onChange={(newValue) => newValue && handleParamsChange({ sort: newValue })}
             placeholder={SORT_GAMES_OPTIONS[0].label}
           />
-          <FilterListRightBar queryParams={queryParams} onFilterChange={handleFilterChange} />
+          <FilterListRightBar queryParams={queryParams} onFilterChange={handleParamsChange} />
           <DisplayModeSelector value={viewMode} onChange={(value) => setViewMode(value)} />
         </Box>
       </Box>

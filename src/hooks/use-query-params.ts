@@ -1,26 +1,26 @@
 import React from 'react';
 
-import { useSearchParams } from 'react-router-dom';
+import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
 
-import { BaseQueryParams } from '@/features/lists';
 import { getCurrentQueryParams, removeObjectEmptyProperties } from '@/utils';
 
-export const useQueryParams = <T extends BaseQueryParams>() => {
+export const useQueryParams = <T>() => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const queryParams = React.useMemo(() => {
+  const queryParams: T = React.useMemo(() => {
     return getCurrentQueryParams(searchParams) as T;
   }, [searchParams]);
 
   const updateQueryParams = React.useCallback(
-    (data: Partial<T>) => {
-      const updatedParams = {
+    (params: T) => {
+      const updatedParams: T = {
         ...queryParams,
-        ...data,
+        ...params,
       };
 
-      const cleanedParams = removeObjectEmptyProperties(updatedParams);
-      setSearchParams(new URLSearchParams(cleanedParams as Record<string, string>), {
+      const cleanedParams: T = removeObjectEmptyProperties(updatedParams);
+
+      setSearchParams(cleanedParams as ParamKeyValuePair[], {
         replace: true,
       });
     },

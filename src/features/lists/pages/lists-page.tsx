@@ -10,10 +10,10 @@ import { ViewMode } from '@/types';
 
 import { DisplayModeSelector, ListCardView, ListsItemView } from '../components';
 import { SORT_LISTS_OPTIONS } from '../constants';
-import { ListQueryParams } from '../types';
+import { SortListsQueryParams } from '../types';
 
 const ListsPage: React.FC = () => {
-  const { queryParams, updateQueryParams } = useQueryParams<ListQueryParams>();
+  const { queryParams, updateQueryParams } = useQueryParams<SortListsQueryParams>();
 
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
@@ -24,8 +24,8 @@ const ListsPage: React.FC = () => {
     }
   }, [queryParams.sort, updateQueryParams]);
 
-  const handleParamsChange = (key: string, value: string) => {
-    updateQueryParams({ [key]: value });
+  const handleParamsChange = (data: SortListsQueryParams) => {
+    updateQueryParams(data);
   };
 
   return (
@@ -41,7 +41,7 @@ const ListsPage: React.FC = () => {
           <Select
             data={SORT_LISTS_OPTIONS}
             value={queryParams.sort}
-            onChange={(newValue) => newValue && handleParamsChange('sort', newValue)}
+            onChange={(newValue) => newValue && handleParamsChange({ sort: newValue })}
             placeholder={SORT_LISTS_OPTIONS[0].label}
           />
           <DisplayModeSelector value={viewMode} onChange={(value) => setViewMode(value)} />
