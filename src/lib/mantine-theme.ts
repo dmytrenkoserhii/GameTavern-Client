@@ -59,6 +59,7 @@ export const theme: ReturnType<typeof createTheme> = createTheme({
     Loader: {
       defaultProps: {
         type: 'dots',
+        color: 'primary',
       },
     },
   },

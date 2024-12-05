@@ -2,16 +2,19 @@ import { useTranslation } from 'react-i18next';
 
 import { Stack, Text } from '@mantine/core';
 
+import { User } from '@/features/user';
+
 import { Friend } from '../types';
 import { FriendsListItem } from './friends-list-item';
 
 interface FriendsListProps {
   friends: Friend[];
-  onUnfollow: (id: string) => void;
-  onMessage: (id: string) => void;
+  currentUser: User;
+  onDelete: (id: number) => void;
+  onMessage: (id: number) => void;
 }
 
-export const FriendsList = ({ friends, onUnfollow, onMessage }: FriendsListProps) => {
+export const FriendsList = ({ friends, currentUser, onDelete, onMessage }: FriendsListProps) => {
   const { t } = useTranslation();
 
   if (friends.length === 0) {
@@ -28,7 +31,8 @@ export const FriendsList = ({ friends, onUnfollow, onMessage }: FriendsListProps
         <FriendsListItem
           key={friend.id}
           friend={friend}
-          onUnfollow={onUnfollow}
+          currentUser={currentUser}
+          onDelete={onDelete}
           onMessage={onMessage}
         />
       ))}

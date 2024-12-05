@@ -6,15 +6,18 @@ import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 import { Footer, Header, Navbar } from '@/components';
+import { useFriendsSocket } from '@/features/friends';
 import { GlobalChat, GlobalChatButton } from '@/features/messages';
-import { getGlobalChatSocket } from '@/lib/global-chat-socket';
+import { getGlobalChatSocket } from '@/lib/sockets';
 
-const socket = getGlobalChatSocket();
+const globalChatSocket = getGlobalChatSocket();
 
 export const AuthLayout: React.FC = () => {
   const [opened, { toggle }] = useDisclosure();
   const [globalChatOpened, { toggle: toggleGlobalChat }] = useDisclosure();
   const [hasNewMessages, setHasNewMessages] = React.useState(false);
+
+  useFriendsSocket();
 
   const onNewMessage = () => {
     if (!globalChatOpened) {
@@ -23,10 +26,10 @@ export const AuthLayout: React.FC = () => {
   };
 
   React.useEffect(() => {
-    socket.on('new_global_message', onNewMessage);
+    globalChatSocket.on('new_global_message', onNewMessage);
 
     return () => {
-      socket.off('new_global_message', onNewMessage);
+      globalChatSocket.off('new_global_message', onNewMessage);
     };
   }, []);
 

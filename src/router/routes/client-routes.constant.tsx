@@ -133,6 +133,8 @@ export const CLIENT_ROUTES: RouteObject[] = [
               <div>
                 <ul>
                   <li>Global Chat On/Off</li>
+                  <li>Disable/Enable processing on navbar links Indicator</li>
+                  <li>Close global chat on click outside</li>
                 </ul>
               </div>
             ),

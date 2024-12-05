@@ -1,20 +1,30 @@
+import { useTranslation } from 'react-i18next';
 import { BsChatDots } from 'react-icons/bs';
 import { TiUserDeleteOutline } from 'react-icons/ti';
 import { useNavigate } from 'react-router-dom';
 
-import { Avatar, Badge, Box, Button, Group, Paper, Text } from '@mantine/core';
+import { Avatar, Box, Button, Group, Indicator, Paper, Stack, Text } from '@mantine/core';
 
 import { getFriendRoute } from '@/enums/routes.enum';
+import { User } from '@/features/user';
 
 import { Friend } from '../types';
 
 interface FriendsListItemProps {
   friend: Friend;
-  onUnfollow: (id: string) => void;
-  onMessage: (id: string) => void;
+  currentUser: User;
+  onDelete: (id: number) => void;
+  onMessage: (id: number) => void;
 }
 
-export const FriendsListItem = ({ friend, onUnfollow, onMessage }: FriendsListItemProps) => {
+export const FriendsListItem = ({
+  friend,
+  currentUser,
+  onDelete,
+  onMessage,
+}: FriendsListItemProps) => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const onFriendClick = () => {
@@ -26,43 +36,41 @@ export const FriendsListItem = ({ friend, onUnfollow, onMessage }: FriendsListIt
     onMessage(friend.id);
   };
 
-  const onUnfollowClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onDeleteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    onUnfollow(friend.id);
+    onDelete(friend.id);
   };
+
+  const userToDisplay = friend.sender.id === currentUser.id ? friend.receiver : friend.sender;
 
   return (
     <Paper shadow="sm" withBorder style={{ cursor: 'pointer' }} onClick={onFriendClick}>
       <Group justify="space-between" p="sm">
         <Group gap="sm">
           <Box pos="relative">
-            <Avatar
-              src={friend.avatarUrl}
-              size="md"
-              radius="xl"
-              color="initials"
-              name={friend.username}
-              variant="outline"
-            />
-            {friend.isOnline && (
-              <Badge //Use Indicator instead
-                size="xs"
-                variant="filled"
-                color="green"
-                w={12}
-                h={12}
-                p={0}
-                style={{
-                  position: 'absolute',
-                  bottom: -2,
-                  right: -2,
-                  borderRadius: '50%',
-                  border: '2px solid var(--mantine-color-body)',
-                }}
+            <Indicator
+              size={12}
+              color="green"
+              withBorder
+              // disabled={}
+              offset={6}
+              position="bottom-end"
+              processing
+            >
+              <Avatar
+                src={userToDisplay.account.avatar}
+                size="md"
+                radius="xl"
+                color="initials"
+                name={userToDisplay.account.username}
+                variant="outline"
               />
-            )}
+            </Indicator>
           </Box>
-          <Text fw={500}>{friend.username}</Text>
+          <Stack gap={0}>
+            <Text fw={500}>{userToDisplay.account.username}</Text>
+            <Text c="dimmed">{userToDisplay.email}</Text>
+          </Stack>
         </Group>
 
         <Group gap="xs">
@@ -73,16 +81,16 @@ export const FriendsListItem = ({ friend, onUnfollow, onMessage }: FriendsListIt
             onClick={onMessageClick}
             leftSection={<BsChatDots />}
           >
-            Message
+            {t('general.message')}
           </Button>
           <Button
             color="red"
             variant="outline"
             radius="sm"
-            onClick={onUnfollowClick}
+            onClick={onDeleteClick}
             leftSection={<TiUserDeleteOutline />}
           >
-            Unfollow
+            {t('general.delete')}
           </Button>
         </Group>
       </Group>

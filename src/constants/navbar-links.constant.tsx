@@ -24,6 +24,8 @@ export const NAVBAR_LINKS: NavbarLink[] = [
     translationLabel: 'navbar.friends_link',
     icon: <MdGroups />,
     isPremium: true,
+    highlight: true,
+    highlightType: 'label',
   },
   {
     to: Routes.CHATS,

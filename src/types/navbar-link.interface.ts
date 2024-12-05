@@ -5,4 +5,7 @@ export interface NavbarLink {
   translationLabel: string;
   icon: React.ReactNode;
   isPremium?: boolean;
+  highlight?: boolean;
+  highlightType?: 'label' | 'badge';
+  highlightLabel?: string;
 }

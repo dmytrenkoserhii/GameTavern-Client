@@ -18,14 +18,14 @@ import {
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 
 import { User, UsersService } from '@/features/user';
-import { getGlobalChatSocket } from '@/lib/global-chat-socket';
+import { getGlobalChatSocket } from '@/lib/sockets';
 
 import { GlobalChatService } from '../services';
 import { GlobalMessage } from '../types';
 import { GlobalChatForm } from './global-chat-form';
 import { GlobalChatMessage } from './global-chat-message';
 
-const socket = getGlobalChatSocket();
+const globalChatSocket = getGlobalChatSocket();
 
 interface GlobalChatProps {
   opened: boolean;
@@ -35,7 +35,7 @@ interface GlobalChatProps {
 export const GlobalChat = ({ opened }: GlobalChatProps) => {
   const { t } = useTranslation();
 
-  const [isConnected, setIsConnected] = React.useState(socket.connected);
+  const [isConnected, setIsConnected] = React.useState(globalChatSocket.connected);
   const [realtimeMessages, setRealtimeMessages] = React.useState<GlobalMessage[]>([]);
   const messagesContainerRef = React.useRef<HTMLDivElement>(null);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
@@ -129,12 +129,12 @@ export const GlobalChat = ({ opened }: GlobalChatProps) => {
       setRealtimeMessages((previous) => [...previous, value]);
     }
 
-    socket.on('new_global_message', onReceiveMessage);
+    globalChatSocket.on('new_global_message', onReceiveMessage);
 
     return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-      socket.off('new_global_message', onReceiveMessage);
+      globalChatSocket.off('connect', onConnect);
+      globalChatSocket.off('disconnect', onDisconnect);
+      globalChatSocket.off('new_global_message', onReceiveMessage);
     };
   }, []);
 

@@ -3,5 +3,6 @@ export const PREMIUM_OPTIONS = [
   'Unlimited games in a list',
   'Unlock friends',
   'Unlock messages',
+  'Unlock guilds',
   'AI Assistant',
 ];

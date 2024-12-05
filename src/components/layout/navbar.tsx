@@ -9,6 +9,7 @@ import { NAVBAR_LINKS } from '@/constants';
 import { Routes } from '@/enums';
 import { AuthService } from '@/features/authentication';
 import { User, UsersService } from '@/features/user';
+import { NavbarLink as INavbarLink } from '@/types';
 
 import { CrownIcon } from '../icons/crown-icon';
 import { NavbarLink } from './navbar-link';
@@ -45,11 +46,32 @@ export const Navbar: React.FC = () => {
     logout();
   };
 
+  const getLinkWithHighlight = (link: INavbarLink) => {
+    const highlights = {
+      [Routes.FRIENDS]: true,
+    };
+
+    const labels = {
+      [Routes.FRIENDS]: '11',
+    };
+
+    const linkWithHighlight = {
+      ...link,
+      highlight: highlights[link.to as keyof typeof highlights] || false,
+    };
+
+    if (linkWithHighlight.highlight && linkWithHighlight.highlightType === 'label') {
+      linkWithHighlight.highlightLabel = labels[link.to as keyof typeof labels] || '';
+    }
+
+    return linkWithHighlight;
+  };
+
   return (
     <Stack justify="space-between" h="100%">
       <Stack gap="md">
         {NAVBAR_LINKS.map((link) => (
-          <NavbarLink key={link.to} link={link} user={user} />
+          <NavbarLink key={link.to} link={getLinkWithHighlight(link)} user={user} />
         ))}
       </Stack>
 

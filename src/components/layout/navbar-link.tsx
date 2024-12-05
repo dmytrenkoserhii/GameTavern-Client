@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 
-import { NavLink } from '@mantine/core';
+import { Indicator, NavLink } from '@mantine/core';
 
 import { User } from '@/features/user';
 import { NavbarLink as INavbarLink } from '@/types';
@@ -25,18 +25,28 @@ export const NavbarLink: React.FC<NavbarLinkProps> = ({ link, user }) => {
     ) : null;
 
   return (
-    <NavLink
-      component={Link}
-      to={link.to}
-      label={t(link.translationLabel)}
-      leftSection={link.icon}
-      rightSection={rightSection}
-      active={isActive}
-      color="primary"
-      style={{
-        color:
-          link.isPremium && !user?.isPremium ? 'var(--mantine-color-tertiary-filled)' : undefined,
-      }}
-    />
+    <Indicator
+      label={link.highlightLabel}
+      size={link.highlightType === 'label' ? 16 : 10}
+      color="secondary"
+      position="middle-end"
+      offset={20}
+      disabled={!link.highlight}
+      processing
+    >
+      <NavLink
+        component={Link}
+        to={link.to}
+        label={t(link.translationLabel)}
+        leftSection={link.icon}
+        rightSection={rightSection}
+        active={isActive}
+        color="primary"
+        style={{
+          color:
+            link.isPremium && !user?.isPremium ? 'var(--mantine-color-tertiary-filled)' : undefined,
+        }}
+      />
+    </Indicator>
   );
 };

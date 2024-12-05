@@ -1,6 +1,12 @@
+import { User } from '@/features/user';
+
+import { FriendStatus } from '../enums';
+
 export interface Friend {
-  id: string;
-  username: string;
-  avatarUrl: string;
-  isOnline: boolean;
+  id: number;
+  sender: User;
+  receiver: User;
+  status: FriendStatus;
+  createdAt: Date;
+  updatedAt: Date;
 }
