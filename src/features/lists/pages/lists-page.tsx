@@ -1,51 +1,31 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
 
 import { Box, Button, Divider, Select, Text } from '@mantine/core';
 
 import { DUMMY_LISTS } from '@/DUMMY_DATA';
+import { useQueryParams } from '@/hooks';
 import { ViewMode } from '@/types';
-import { getCurrentQueryParams } from '@/utils';
 
 import { DisplayModeSelector, ListCardView, ListsItemView } from '../components';
 import { SORT_LISTS_OPTIONS } from '../constants';
+import { ListQueryParams } from '../types';
 
 const ListsPage: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const queryParams = React.useMemo(() => {
-    return getCurrentQueryParams(searchParams);
-  }, [searchParams]);
+  const { queryParams, updateQueryParams } = useQueryParams<ListQueryParams>();
 
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
 
   React.useEffect(() => {
     if (!queryParams.sort) {
-      setSearchParams(
-        {
-          ...queryParams,
-          sort: queryParams.sort || SORT_LISTS_OPTIONS[0].value,
-        },
-        {
-          replace: true,
-        },
-      );
+      updateQueryParams({ sort: SORT_LISTS_OPTIONS[0].value });
     }
-  }, [queryParams, setSearchParams]);
+  }, [queryParams.sort, updateQueryParams]);
 
   const handleParamsChange = (key: string, value: string) => {
-    setSearchParams(
-      {
-        ...queryParams,
-        [key]: value,
-      },
-      {
-        replace: true,
-      },
-    );
+    updateQueryParams({ [key]: value });
   };
 
   return (
