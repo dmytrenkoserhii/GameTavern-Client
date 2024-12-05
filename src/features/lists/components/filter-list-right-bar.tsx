@@ -7,13 +7,11 @@ import { useForm } from '@mantine/form';
 
 import { generateYearsOptions } from '@/utils';
 
-interface FilterListRightBarData {
-  releaseYear: string;
-}
+import { FilterListRightBarData, ListQueryParams } from '../types';
 
 interface FilterListRightBarProps {
-  queryParams: { [key: string]: string };
-  onFilterChange: (data: FilterListRightBarData) => void;
+  queryParams: Partial<ListQueryParams>;
+  onFilterChange: (data: Partial<FilterListRightBarData>) => void;
 }
 
 const RELEASE_YEAR_OPTIONS = generateYearsOptions(2010);
@@ -27,6 +25,7 @@ export const FilterListRightBar: React.FC<FilterListRightBarProps> = ({
   const form = useForm<FilterListRightBarData>({
     initialValues: {
       releaseYear: '',
+      platform: '',
     },
   });
 

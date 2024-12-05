@@ -3,14 +3,14 @@ import { z } from 'zod';
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Box, Button, Divider, Select, Text, TextInput, Textarea } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 
 import { DUMMY_API_GAMES, DUMMY_LISTS } from '@/DUMMY_DATA';
+import { useQueryParams } from '@/hooks';
 import { ViewMode } from '@/types';
-import { getCurrentQueryParams, removeObjectEmptyProperties } from '@/utils';
 
 import {
   DisplayModeSelector,
@@ -20,18 +20,14 @@ import {
 } from '../components';
 import { SORT_GAMES_OPTIONS } from '../constants';
 import { listFormSchema } from '../schemas';
-import { ListFilterData } from '../types';
+import { ListQueryParams } from '../types';
 
 type ListForm = z.infer<typeof listFormSchema>;
 
 const ListPage: React.FC = () => {
+  const { queryParams, updateQueryParams } = useQueryParams<ListQueryParams>();
   const { id } = useParams<{ id: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [isEditing, setIsEditing] = React.useState(false);
-
-  const queryParams = React.useMemo(() => {
-    return getCurrentQueryParams(searchParams);
-  }, [searchParams]);
 
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
@@ -59,42 +55,12 @@ const ListPage: React.FC = () => {
 
   React.useEffect(() => {
     if (!queryParams.sort) {
-      setSearchParams(
-        {
-          ...queryParams,
-          sort: queryParams.sort || SORT_GAMES_OPTIONS[0].value,
-        },
-        {
-          replace: true,
-        },
-      );
+      updateQueryParams({ sort: SORT_GAMES_OPTIONS[0].value });
     }
-  }, [queryParams, setSearchParams]);
+  }, [queryParams.sort, updateQueryParams]);
 
-  const handleParamsChange = (key: string, value: string) => {
-    setSearchParams(
-      {
-        ...queryParams,
-        [key]: value,
-      },
-      {
-        replace: true,
-      },
-    );
-  };
-
-  const handleFilterChange = (data: ListFilterData) => {
-    const cleanedData = removeObjectEmptyProperties(data);
-
-    setSearchParams(
-      {
-        ...queryParams,
-        ...cleanedData,
-      },
-      {
-        replace: true,
-      },
-    );
+  const handleParamsChange = (data: ListQueryParams) => {
+    updateQueryParams(data);
   };
 
   return (
@@ -144,10 +110,10 @@ const ListPage: React.FC = () => {
           <Select
             data={SORT_GAMES_OPTIONS}
             value={queryParams.sort}
-            onChange={(newValue) => newValue && handleParamsChange('sort', newValue)}
+            onChange={(newValue) => newValue && handleParamsChange({ sort: newValue })}
             placeholder={SORT_GAMES_OPTIONS[0].label}
           />
-          <FilterListRightBar queryParams={queryParams} onFilterChange={handleFilterChange} />
+          <FilterListRightBar queryParams={queryParams} onFilterChange={handleParamsChange} />
           <DisplayModeSelector value={viewMode} onChange={(value) => setViewMode(value)} />
         </Box>
       </Box>
