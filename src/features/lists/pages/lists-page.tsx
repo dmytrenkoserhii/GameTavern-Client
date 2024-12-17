@@ -4,17 +4,21 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Divider, Select, Text } from '@mantine/core';
 
-import { DUMMY_LISTS } from '@/DUMMY_DATA';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { Spinner } from '@/components';
 import { useQueryParams } from '@/hooks';
 import { ViewMode } from '@/types';
+import { getErrorMessage } from '@/utils';
 
 import { DisplayModeSelector, ListCardView, ListsItemView } from '../components';
 import { SORT_LISTS_OPTIONS } from '../constants';
-import { SortListsQueryParams } from '../types';
+import { ListsService } from '../services';
+import { CreateListRequestData, GetListsRequestData, SortListsQueryParams } from '../types';
 
 const ListsPage: React.FC = () => {
   const { queryParams, updateQueryParams } = useQueryParams<SortListsQueryParams>();
-
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
 
@@ -24,18 +28,61 @@ const ListsPage: React.FC = () => {
     }
   }, [queryParams.sort, updateQueryParams]);
 
+  const getListsRequestData: GetListsRequestData = {
+    limit: 10,
+    page: 1,
+    sort: queryParams.sort || SORT_LISTS_OPTIONS[0].value,
+  };
+
+  const {
+    data: lists,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ['lists', queryParams.sort],
+    queryFn: () => ListsService.getLists(getListsRequestData),
+  });
+
+  const { mutate: createList } = useMutation({
+    mutationFn: (createListData: CreateListRequestData) => ListsService.createList(createListData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['lists'] });
+    },
+    onError: (error) => {
+      // eslint-disable-next-line no-console
+      console.error('Error creating list:', error);
+    },
+  });
+
   const handleParamsChange = (data: SortListsQueryParams) => {
     updateQueryParams(data);
   };
 
+  const handleCreateList = () => {
+    createList({
+      name: 'New List',
+      description: '',
+    });
+  };
+
+  if (error) {
+    return <Text>{getErrorMessage(error)}</Text>;
+  }
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <Box mb="md">
-        <Button variant="filled">{t('lists.create_list')}</Button>
+        <Button variant="filled" onClick={handleCreateList}>
+          {t('lists.create_list')}
+        </Button>
       </Box>
       <Box mb="xs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
         <Text>
-          {DUMMY_LISTS.length} {/*Lists*/}
+          {lists?.meta.total} {/*Lists*/}
         </Text>
         <Box style={{ display: 'flex', gap: '1rem' }}>
           <Select
@@ -50,9 +97,9 @@ const ListsPage: React.FC = () => {
       <Divider mb="md" />
       <Box>
         {viewMode === 'list' ? (
-          <ListsItemView lists={DUMMY_LISTS} />
+          <ListsItemView lists={lists?.items || []} />
         ) : (
-          <ListCardView lists={DUMMY_LISTS} />
+          <ListCardView lists={lists?.items || []} />
         )}
       </Box>
     </>
