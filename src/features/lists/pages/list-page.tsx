@@ -3,14 +3,18 @@ import { z } from 'zod';
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Button, Divider, Select, Text, TextInput, Textarea } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 
-import { DUMMY_API_GAMES, DUMMY_LISTS } from '@/DUMMY_DATA';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { DUMMY_API_GAMES } from '@/DUMMY_DATA';
+import { Spinner } from '@/components';
 import { useQueryParams } from '@/hooks';
 import { ViewMode } from '@/types';
+import { getErrorMessage } from '@/utils';
 
 import {
   DisplayModeSelector,
@@ -20,36 +24,81 @@ import {
 } from '../components';
 import { SORT_GAMES_OPTIONS } from '../constants';
 import { listFormSchema } from '../schemas';
-import { ListQueryParams } from '../types';
+import { ListsService } from '../services';
+import { EditListRequestData, List, ListQueryParams } from '../types';
 
 type ListForm = z.infer<typeof listFormSchema>;
 
 const ListPage: React.FC = () => {
   const { queryParams, updateQueryParams } = useQueryParams<ListQueryParams>();
-  const { id } = useParams<{ id: string }>();
   const [isEditing, setIsEditing] = React.useState(false);
+  const { id } = useParams<{ id: string }>();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
-  const currentList = DUMMY_LISTS.find((list) => list.id === Number(id));
+
+  const {
+    data: list,
+    error,
+    isLoading,
+  } = useQuery<List>({
+    queryKey: ['list', id],
+    queryFn: () => {
+      if (!id) {
+        return Promise.reject(new Error('ID is required'));
+      }
+      return ListsService.getCurrentList(id);
+    },
+  });
 
   const form = useForm<ListForm>({
     initialValues: {
-      name: currentList?.name || '',
-      description: currentList?.description || '',
+      name: list?.name || '',
+      description: list?.description || '',
     },
     validate: zodResolver(listFormSchema),
   });
 
+  const { mutate: editList, isPending } = useMutation({
+    mutationFn: ({ id, editListData }: { id: string; editListData: EditListRequestData }) =>
+      ListsService.editList(id, editListData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['list', id] });
+    },
+  });
+
+  const { mutate: deleteList } = useMutation({
+    mutationFn: (id: string) => ListsService.deleteList(id),
+    onSuccess: () => {
+      navigate('/lists');
+      queryClient.invalidateQueries({ queryKey: ['lists'] });
+    },
+  });
+
   const handleEditToggle = () => {
     if (isEditing) {
+      editList({
+        id: id!,
+        editListData: {
+          name: form.values.name,
+          description: form.values.description,
+        },
+      });
       setIsEditing(false);
     } else {
       form.setValues({
-        name: currentList?.name || '',
-        description: currentList?.description || '',
+        name: list?.name || '',
+        description: list?.description || '',
       });
       setIsEditing(true);
+    }
+  };
+
+  const handleDelete = () => {
+    if (id) {
+      deleteList(id);
     }
   };
 
@@ -62,6 +111,14 @@ const ListPage: React.FC = () => {
   const handleParamsChange = (data: ListQueryParams) => {
     updateQueryParams(data);
   };
+
+  if (error) {
+    return <Text>{getErrorMessage(error)}</Text>;
+  }
+
+  if (isLoading || isPending) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -76,18 +133,20 @@ const ListPage: React.FC = () => {
               />
             ) : (
               <Text size="xl" fw={700}>
-                {currentList?.name}
+                {list?.name}
               </Text>
             )}
           </Box>
-          <Button
-            variant="outline"
-            w={180}
-            style={{ marginLeft: '10px' }}
-            onClick={handleEditToggle}
-          >
-            {t(isEditing ? 'general.save_changes' : 'lists.edit_list_button')}
-          </Button>
+          <Box style={{ display: 'flex', gap: '10px' }}>
+            {isEditing && (
+              <Button variant="outline" color="red" w={180} onClick={handleDelete}>
+                {t('lists.delete_list_button')}
+              </Button>
+            )}
+            <Button variant="outline" w={180} onClick={handleEditToggle}>
+              {t(isEditing ? 'general.save_changes' : 'lists.edit_list_button')}
+            </Button>
+          </Box>
         </Box>
 
         <Box style={{ maxWidth: '50%' }}>
@@ -98,7 +157,7 @@ const ListPage: React.FC = () => {
               placeholder={t('lists.description_placeholder')}
             />
           ) : (
-            <Text>{currentList?.description}</Text>
+            <Text>{list?.description}</Text>
           )}
         </Box>
       </Box>
