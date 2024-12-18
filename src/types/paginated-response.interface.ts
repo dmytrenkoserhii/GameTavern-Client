@@ -1,7 +1,5 @@
-import { List } from './list.interface';
-
-export interface GetListsResponseData {
-  items: List[];
+export interface PaginatedResponse<T> {
+  items: T[];
   meta: {
     total: number;
     currentPage: number;

@@ -4,13 +4,13 @@ import { Group, Menu, Text, UnstyledButton } from '@mantine/core';
 
 import { ViewMode } from '@/types';
 
-import { displayOptions } from '../constants';
+import { DISPLAY_OPTIONS } from '../constants';
 
 export const DisplayModeSelector: React.FC<{
   value: ViewMode;
   onChange: (value: ViewMode) => void;
 }> = ({ value, onChange }) => {
-  const selectedOption = displayOptions.find((opt) => opt.value === value);
+  const selectedOption = DISPLAY_OPTIONS.find((opt) => opt.value === value);
 
   return (
     <Menu>
@@ -25,7 +25,7 @@ export const DisplayModeSelector: React.FC<{
       </Menu.Target>
 
       <Menu.Dropdown>
-        {displayOptions.map((option) => (
+        {DISPLAY_OPTIONS.map((option) => (
           <Menu.Item
             key={option.value}
             leftSection={<option.icon size={16} />}

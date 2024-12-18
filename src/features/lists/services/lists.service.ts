@@ -1,16 +1,11 @@
 import { privateAxios } from '@/lib';
+import { PaginatedResponse } from '@/types';
 
-import {
-  CreateListRequestData,
-  EditListRequestData,
-  GetListsRequestData,
-  GetListsResponseData,
-  List,
-} from '../types';
+import { CreateListRequestData, EditListRequestData, GetListsRequestData, List } from '../types';
 
 export const ListsService = {
-  async getLists(queryParams: GetListsRequestData): Promise<GetListsResponseData> {
-    const response = await privateAxios.get<GetListsResponseData>('/lists', {
+  async getLists(queryParams: GetListsRequestData): Promise<PaginatedResponse<List>> {
+    const response = await privateAxios.get<PaginatedResponse<List>>('/lists', {
       params: queryParams,
     });
     return response.data;
@@ -35,5 +30,3 @@ export const ListsService = {
     await privateAxios.delete(`/lists/${id}`);
   },
 };
-
-export default ListsService;
