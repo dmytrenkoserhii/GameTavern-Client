@@ -6,5 +6,5 @@ export interface List {
   description: string;
   createdAt: Date;
   updatedAt: Date;
-  games: Game[];
+  games?: Game[];
 }

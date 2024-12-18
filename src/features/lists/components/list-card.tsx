@@ -30,7 +30,7 @@ export const ListCard: React.FC<ListCardProps> = ({ list }) => {
           {list.name}
         </Text>
         <Text c="dimmed" size="sm">
-          {list.games.length} {/*Games*/}
+          {/* {list.games.length} Games */}
         </Text>
       </Stack>
     </Card>
