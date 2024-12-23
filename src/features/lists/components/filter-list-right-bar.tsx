@@ -5,13 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { Button, Drawer, Select } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
+import { ListFilterData, ListQueryParams } from '@/types';
 import { generateYearsOptions } from '@/utils';
-
-import { FilterListRightBarData, ListQueryParams } from '../types';
 
 interface FilterListRightBarProps {
   queryParams: Partial<ListQueryParams>;
-  onFilterChange: (data: Partial<FilterListRightBarData>) => void;
+  onFilterChange: (data: Partial<ListFilterData>) => void;
 }
 
 const RELEASE_YEAR_OPTIONS = generateYearsOptions(2010);
@@ -22,7 +21,7 @@ export const FilterListRightBar: React.FC<FilterListRightBarProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const form = useForm<FilterListRightBarData>({
+  const form = useForm<ListFilterData>({
     initialValues: {
       releaseYear: '',
       platform: '',
@@ -39,7 +38,7 @@ export const FilterListRightBar: React.FC<FilterListRightBarProps> = ({
     }
   }, [queryParams, form]);
 
-  function onSubmit(data: FilterListRightBarData) {
+  function onSubmit(data: ListFilterData) {
     onFilterChange(data);
     setOpened(false);
   }
