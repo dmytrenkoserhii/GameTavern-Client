@@ -25,6 +25,8 @@ const EmailVerification = React.lazy(
 const SubscriptionPage = React.lazy(() => import('@/features/payments/pages/subscription-page'));
 const ListsPage = React.lazy(() => import('@/features/lists/pages/lists-page'));
 const ListPage = React.lazy(() => import('@/features/lists/pages/list-page'));
+const GamesPage = React.lazy(() => import('@/features/games-api/pages/games-page'));
+const GamePage = React.lazy(() => import('@/features/games-api/pages/game-page'));
 
 export const CLIENT_ROUTES: RouteObject[] = [
   {
@@ -36,11 +38,19 @@ export const CLIENT_ROUTES: RouteObject[] = [
         children: [
           {
             path: Routes.GAMES,
-            element: <div>Games</div>,
+            element: (
+              <React.Suspense fallback={<Spinner />}>
+                <GamesPage />
+              </React.Suspense>
+            ),
           },
           {
             path: `${Routes.GAME}:id`,
-            element: <div>Game</div>,
+            element: (
+              <React.Suspense fallback={<Spinner />}>
+                <GamePage />
+              </React.Suspense>
+            ),
           },
           {
             path: Routes.LISTS,
