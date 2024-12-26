@@ -13,7 +13,7 @@ interface FilterListRightBarProps {
   onFilterChange: (data: Partial<ListFilterData>) => void;
 }
 
-const RELEASE_YEAR_OPTIONS = generateYearsOptions(2010);
+const RELEASE_YEAR_OPTIONS = generateYearsOptions(1990);
 
 export const FilterListRightBar: React.FC<FilterListRightBarProps> = ({
   queryParams,

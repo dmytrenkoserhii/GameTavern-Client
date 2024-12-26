@@ -1,16 +1,17 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, Divider, Pagination, Select, Text } from '@mantine/core';
+import { Box, Button, Divider, Pagination, Select, Text, Title } from '@mantine/core';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { Spinner } from '@/components';
-import { DISPLAY_OPTIONS, GamesCardView, GamesItemView } from '@/features/lists';
+import { Routes } from '@/enums';
+import { DISPLAY_OPTIONS, GamesCardList, GamesItemList } from '@/features/lists';
 import { useQueryParams } from '@/hooks';
 import { GamesQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
-import { getErrorMessage } from '@/utils';
 
 import { FilterGameRightBar } from '../components';
 import { GAMES_LIMIT_OPTIONS, SORT_GAMES_API_OPTIONS } from '../constants';
@@ -20,6 +21,7 @@ const GamesPage: React.FC = () => {
   const { queryParams, updateQueryParams } = useQueryParams<GamesQueryParams>();
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (!queryParams.sort) {
@@ -32,7 +34,7 @@ const GamesPage: React.FC = () => {
   }, [queryParams.sort, updateQueryParams]);
 
   const getGamesRequestData = {
-    limit: queryParams.limit ? queryParams.limit : '12',
+    limit: queryParams.limit ? queryParams.limit : GAMES_LIMIT_OPTIONS[0].value,
     page: queryParams.page ? queryParams.page : '1',
     sort: queryParams.sort || SORT_GAMES_API_OPTIONS[0].value,
     platform: queryParams.platform,
@@ -47,16 +49,26 @@ const GamesPage: React.FC = () => {
 
   const {
     data: gamesData,
-    error,
+    isError,
     isLoading,
   } = useQuery({
     queryKey: ['games', queryParams],
     queryFn: () => GamesApiService.getAllGames(getGamesRequestData),
   });
 
-  if (error) {
-    return <Text>{getErrorMessage(error)}</Text>;
+  if (isError || !gamesData) {
+    return (
+      <Box p="xl" style={{ textAlign: 'center' }}>
+        <Title order={2}>{t('games_api.games_page.not_found_title')}</Title>
+        <Text>{t('games_api.games_page.not_found_description')}</Text>
+
+        <Button onClick={() => navigate(Routes.HOME)} mt="md">
+          {t('games_api.games_page.back_to_games')}
+        </Button>
+      </Box>
+    );
   }
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -94,9 +106,9 @@ const GamesPage: React.FC = () => {
       <Divider mb="md" />
       <Box style={{ flex: 1, minHeight: 'calc(100vh - 330px)' }}>
         {viewMode === 'list' ? (
-          <GamesItemView games={gamesData?.games || []} onGameClick={() => {}} />
+          <GamesItemList games={gamesData?.games || []} onGameClick={() => {}} />
         ) : (
-          <GamesCardView games={gamesData?.games || []} onGameClick={() => {}} />
+          <GamesCardList games={gamesData?.games || []} onGameClick={() => {}} />
         )}
       </Box>
       <Box mt="auto" py="md" style={{ display: 'flex', justifyContent: 'center' }}>

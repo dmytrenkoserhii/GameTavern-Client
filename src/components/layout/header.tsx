@@ -10,7 +10,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 
 import logo from '@/assets/logo.png';
-import { Routes } from '@/enums/routes.enum';
+import { Routes, getGameRoute } from '@/enums/routes.enum';
 import { GamesApiService } from '@/features/games-api';
 import { User, UsersService } from '@/features/user';
 
@@ -33,7 +33,12 @@ export const Header: React.FC = () => {
 
   const { data: searchedGames } = useQuery({
     queryKey: ['searchedGames', debouncedSearch],
-    queryFn: () => GamesApiService.getSearchedGames(debouncedSearch),
+    queryFn: () =>
+      GamesApiService.getAllGames({
+        page: '1',
+        limit: '10',
+        name: debouncedSearch,
+      }),
     enabled: debouncedSearch.length >= 4,
   });
 
@@ -59,7 +64,7 @@ export const Header: React.FC = () => {
           onOptionSubmit={(selectedName) => {
             const selectedGame = searchedGames?.games.find((game) => game.name === selectedName);
             autocompleteRef.current?.blur();
-            navigate(`${Routes.GAMES}/${selectedGame?.id}`);
+            navigate(getGameRoute(selectedGame?.id.toString() ?? ''));
           }}
         />
       </Group>

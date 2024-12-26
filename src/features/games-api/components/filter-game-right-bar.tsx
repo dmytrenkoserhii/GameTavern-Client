@@ -17,7 +17,7 @@ interface FilterGameRightBarProps {
   onFilterChange: (data: Partial<ListFilterData>) => void;
 }
 
-const RELEASE_YEAR_OPTIONS = generateYearsOptions(2010);
+const RELEASE_YEAR_OPTIONS = generateYearsOptions(1990);
 
 export const FilterGameRightBar: React.FC<FilterGameRightBarProps> = ({
   queryParams,
@@ -32,17 +32,7 @@ export const FilterGameRightBar: React.FC<FilterGameRightBarProps> = ({
     },
   });
 
-  const prevParams = React.useRef(queryParams);
-
-  const [opened, setOpened] = React.useState(false);
-
-  // React.useEffect(() => {
-  //   if (Object.keys(queryParams).length > 0) {
-  //     form.setValues(queryParams);
-  //   } else {
-  //     form.reset();
-  //   }
-  // }, [queryParams, form]);
+  const [opened, isOpened] = React.useState(false);
 
   const { data: platforms } = useQuery({
     queryKey: ['platforms'],
@@ -50,27 +40,24 @@ export const FilterGameRightBar: React.FC<FilterGameRightBarProps> = ({
   });
 
   React.useEffect(() => {
-    if (JSON.stringify(prevParams.current) !== JSON.stringify(queryParams)) {
-      if (Object.keys(queryParams).length > 0) {
-        form.setValues(queryParams);
-      } else {
-        form.reset();
-      }
-      prevParams.current = queryParams;
+    if (Object.keys(queryParams).length > 0) {
+      form.setValues(queryParams);
+    } else {
+      form.reset();
     }
-  }, [queryParams]);
+  }, [queryParams, form]);
 
   function onSubmit(data: ListFilterData) {
     onFilterChange(data);
-    setOpened(false);
+    isOpened(false);
   }
 
   return (
     <>
-      <Button onClick={() => setOpened(true)}>{t('games_api.filter_bar.filter_button')}</Button>
+      <Button onClick={() => isOpened(true)}>{t('games_api.filter_bar.filter_button')}</Button>
       <Drawer
         opened={opened}
-        onClose={() => setOpened(false)}
+        onClose={() => isOpened(false)}
         title={t('games_api.filter_bar.drawer_title')}
         padding="xl"
         size="xl"

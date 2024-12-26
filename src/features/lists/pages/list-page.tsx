@@ -16,7 +16,7 @@ import { useQueryParams } from '@/hooks';
 import { ListQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
 import { getErrorMessage } from '@/utils';
 
-import { FilterListRightBar, GamesCardView, GamesItemView } from '../components';
+import { FilterListRightBar, GamesCardList, GamesItemList } from '../components';
 import { DISPLAY_OPTIONS, SORT_GAMES_OPTIONS } from '../constants';
 import { listFormSchema } from '../schemas';
 import { ListsService } from '../services';
@@ -185,9 +185,9 @@ const ListPage: React.FC = () => {
       <Divider mb="md" />
       <Box>
         {viewMode === 'list' ? (
-          <GamesItemView games={DUMMY_API_GAMES} onGameClick={() => {}} />
+          <GamesItemList games={DUMMY_API_GAMES} onGameClick={() => {}} />
         ) : (
-          <GamesCardView games={DUMMY_API_GAMES} onGameClick={() => {}} />
+          <GamesCardList games={DUMMY_API_GAMES} onGameClick={() => {}} />
         )}
       </Box>
     </>

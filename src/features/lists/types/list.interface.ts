@@ -4,5 +4,7 @@ export interface List {
   description: string;
   createdAt: Date;
   updatedAt: Date;
-  games?: [];
+  //TODO: update any type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  games: any[];
 }
