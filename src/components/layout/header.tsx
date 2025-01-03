@@ -64,7 +64,9 @@ export const Header: React.FC = () => {
           onOptionSubmit={(selectedName) => {
             const selectedGame = searchedGames?.games.find((game) => game.name === selectedName);
             autocompleteRef.current?.blur();
-            navigate(getGameRoute(selectedGame?.id.toString() ?? ''));
+            if (selectedGame) {
+              navigate(getGameRoute(selectedGame.id.toString()));
+            }
           }}
         />
       </Group>

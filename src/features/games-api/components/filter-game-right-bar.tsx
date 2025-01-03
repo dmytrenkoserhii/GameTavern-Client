@@ -32,7 +32,7 @@ export const FilterGameRightBar: React.FC<FilterGameRightBarProps> = ({
     },
   });
 
-  const [opened, isOpened] = React.useState(false);
+  const [isOpened, setIsOpened] = React.useState(false);
 
   const { data: platforms } = useQuery({
     queryKey: ['platforms'],
@@ -47,17 +47,17 @@ export const FilterGameRightBar: React.FC<FilterGameRightBarProps> = ({
     }
   }, [queryParams, form]);
 
-  function onSubmit(data: ListFilterData) {
+  const onSubmit = (data: ListFilterData) => {
     onFilterChange(data);
-    isOpened(false);
-  }
+    setIsOpened(false);
+  };
 
   return (
     <>
-      <Button onClick={() => isOpened(true)}>{t('games_api.filter_bar.filter_button')}</Button>
+      <Button onClick={() => setIsOpened(true)}>{t('games_api.filter_bar.filter_button')}</Button>
       <Drawer
-        opened={opened}
-        onClose={() => isOpened(false)}
+        opened={isOpened}
+        onClose={() => setIsOpened(false)}
         title={t('games_api.filter_bar.drawer_title')}
         padding="xl"
         size="xl"

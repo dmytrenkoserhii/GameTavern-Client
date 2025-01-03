@@ -1,16 +1,15 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Divider, Pagination, Select, Text, Title } from '@mantine/core';
+import { Box, Divider, Pagination, Select, Text } from '@mantine/core';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { Spinner } from '@/components';
+import { NotFoundReturn, Spinner } from '@/components';
 import { Routes } from '@/enums';
 import { DISPLAY_OPTIONS, GamesCardList, GamesItemList } from '@/features/lists';
-import { useQueryParams } from '@/hooks';
+import { useQueryParams, useRedirectTimer } from '@/hooks';
 import { GamesQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
 
 import { FilterGameRightBar } from '../components';
@@ -21,7 +20,10 @@ const GamesPage: React.FC = () => {
   const { queryParams, updateQueryParams } = useQueryParams<GamesQueryParams>();
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
-  const navigate = useNavigate();
+  const { startRedirectTimer, countdown, handleNavigate } = useRedirectTimer({
+    route: Routes.HOME,
+    timeout: 5,
+  });
 
   React.useEffect(() => {
     if (!queryParams.sort) {
@@ -56,21 +58,25 @@ const GamesPage: React.FC = () => {
     queryFn: () => GamesApiService.getAllGames(getGamesRequestData),
   });
 
-  if (isError || !gamesData) {
-    return (
-      <Box p="xl" style={{ textAlign: 'center' }}>
-        <Title order={2}>{t('games_api.games_page.not_found_title')}</Title>
-        <Text>{t('games_api.games_page.not_found_description')}</Text>
-
-        <Button onClick={() => navigate(Routes.HOME)} mt="md">
-          {t('games_api.games_page.back_to_games')}
-        </Button>
-      </Box>
-    );
-  }
+  React.useEffect(() => {
+    if (isError) {
+      startRedirectTimer();
+    }
+  }, [isError, startRedirectTimer]);
 
   if (isLoading) {
     return <Spinner />;
+  }
+
+  if (isError) {
+    return (
+      <NotFoundReturn
+        titleText={t('games_api.games_page.not_found_title')}
+        descriptionText={`${t('games_api.games_page.not_found_description')} (${countdown}s)`}
+        buttonText={t('games_api.games_page.back_to_games')}
+        onClick={handleNavigate}
+      />
+    );
   }
 
   return (
@@ -106,9 +112,9 @@ const GamesPage: React.FC = () => {
       <Divider mb="md" />
       <Box style={{ flex: 1, minHeight: 'calc(100vh - 330px)' }}>
         {viewMode === 'list' ? (
-          <GamesItemList games={gamesData?.games || []} onGameClick={() => {}} />
+          <GamesItemList games={gamesData?.games || []} />
         ) : (
-          <GamesCardList games={gamesData?.games || []} onGameClick={() => {}} />
+          <GamesCardList games={gamesData?.games || []} />
         )}
       </Box>
       <Box mt="auto" py="md" style={{ display: 'flex', justifyContent: 'center' }}>

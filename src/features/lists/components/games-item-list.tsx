@@ -8,16 +8,15 @@ import { GameApi } from '@/features/games-api';
 import { GameItem } from './game-item';
 
 interface GamesItemListProps {
-  games: Array<GameApi>;
-  onGameClick: (id: number) => void;
+  games: GameApi[];
 }
 
-export const GamesItemList: React.FC<GamesItemListProps> = ({ games, onGameClick }) => {
+export const GamesItemList: React.FC<GamesItemListProps> = ({ games }) => {
   return (
     <Stack gap="md">
       {games.map((game) => (
-        <Link to={getGameRoute(game.id.toString())} key={game.id}>
-          <GameItem key={game.id} game={game} onClick={() => onGameClick(game.id)} />
+        <Link to={getGameRoute(game.id)} key={game.id}>
+          <GameItem key={game.id} game={game} />
         </Link>
       ))}
     </Stack>

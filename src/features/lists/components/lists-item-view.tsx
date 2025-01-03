@@ -6,7 +6,7 @@ import { List } from '../types';
 import { ListItem } from './list-item';
 
 interface ListsItemViewProps {
-  lists: Array<List>;
+  lists: List[];
 }
 
 export const ListsItemView: React.FC<ListsItemViewProps> = ({ lists }) => {

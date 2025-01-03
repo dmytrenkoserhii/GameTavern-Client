@@ -11,10 +11,9 @@ import styles from './game-card.module.css';
 
 interface GameCardProps {
   game: GameApi;
-  onClick: () => void;
 }
 
-export const GameCard: React.FC<GameCardProps> = ({ game, onClick }) => {
+export const GameCard: React.FC<GameCardProps> = ({ game }) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
   return (
@@ -26,7 +25,6 @@ export const GameCard: React.FC<GameCardProps> = ({ game, onClick }) => {
       className={styles.card}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick}
     >
       <Box className={styles.container}>
         <Image

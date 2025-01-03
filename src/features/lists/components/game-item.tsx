@@ -7,14 +7,12 @@ import { GameApi } from '@/features/games-api';
 
 interface GameItemProps {
   game: GameApi;
-  onClick: () => void;
 }
 
-export const GameItem: React.FC<GameItemProps> = ({ game, onClick }) => {
+export const GameItem: React.FC<GameItemProps> = ({ game }) => {
   return (
     <Paper
       p="md"
-      onClick={onClick}
       style={{
         cursor: 'pointer',
       }}
