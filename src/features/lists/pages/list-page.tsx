@@ -13,14 +13,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { DUMMY_API_GAMES } from '@/DUMMY_DATA';
 import { Spinner } from '@/components';
 import { useQueryParams } from '@/hooks';
-import { SelectItemWithIcon, ViewMode } from '@/types';
+import { ListQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
 import { getErrorMessage } from '@/utils';
 
-import { FilterListRightBar, GamesCardView, GamesItemView } from '../components';
+import { FilterListRightBar, GamesCardList, GamesItemList } from '../components';
 import { DISPLAY_OPTIONS, SORT_GAMES_OPTIONS } from '../constants';
 import { listFormSchema } from '../schemas';
 import { ListsService } from '../services';
-import { EditListRequestData, List, ListQueryParams } from '../types';
+import { EditListRequestData, List } from '../types';
 
 type ListForm = z.infer<typeof listFormSchema>;
 
@@ -163,13 +163,13 @@ const ListPage: React.FC = () => {
           {DUMMY_API_GAMES.length} {/*Games*/}
         </Text>
         <Box style={{ display: 'flex', gap: '1rem' }}>
+          <FilterListRightBar queryParams={queryParams} onFilterChange={handleParamsChange} />
           <Select
             data={SORT_GAMES_OPTIONS}
             value={queryParams.sort}
             onChange={(newValue) => newValue && handleParamsChange({ sort: newValue })}
             placeholder={SORT_GAMES_OPTIONS[0].label}
           />
-          <FilterListRightBar queryParams={queryParams} onFilterChange={handleParamsChange} />
           <Select
             data={DISPLAY_OPTIONS.map((option) => ({
               value: option.value,
@@ -185,9 +185,9 @@ const ListPage: React.FC = () => {
       <Divider mb="md" />
       <Box>
         {viewMode === 'list' ? (
-          <GamesItemView games={DUMMY_API_GAMES} onGameClick={() => {}} />
+          <GamesItemList games={DUMMY_API_GAMES} onGameClick={() => {}} />
         ) : (
-          <GamesCardView games={DUMMY_API_GAMES} onGameClick={() => {}} />
+          <GamesCardList games={DUMMY_API_GAMES} onGameClick={() => {}} />
         )}
       </Box>
     </>

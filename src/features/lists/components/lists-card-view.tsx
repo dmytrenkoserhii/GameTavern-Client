@@ -6,7 +6,7 @@ import { List } from '../types';
 import { ListCard } from './list-card';
 
 interface ListCardViewProps {
-  lists: Array<List>;
+  lists: List[];
 }
 
 export const ListCardView: React.FC<ListCardViewProps> = ({ lists }) => {

@@ -41,7 +41,7 @@ interface Developer {
   site_detail_url: string;
 }
 
-export interface Game {
+export interface GameApi {
   id: number;
   guid: string;
   name: string;
