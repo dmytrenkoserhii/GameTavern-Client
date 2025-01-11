@@ -1,3 +1,4 @@
+import { arrayMove } from '@dnd-kit/sortable';
 import { z } from 'zod';
 
 import React from 'react';
@@ -10,13 +11,13 @@ import { useForm, zodResolver } from '@mantine/form';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { DUMMY_API_GAMES } from '@/DUMMY_DATA';
 import { Spinner } from '@/components';
+import { GamesCardList, GamesItemList, GamesService } from '@/features/games';
 import { useQueryParams } from '@/hooks';
 import { ListQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
 import { getErrorMessage } from '@/utils';
 
-import { FilterListRightBar, GamesCardList, GamesItemList } from '../components';
+import { FilterListRightBar } from '../components';
 import { DISPLAY_OPTIONS, SORT_GAMES_OPTIONS } from '../constants';
 import { listFormSchema } from '../schemas';
 import { ListsService } from '../services';
@@ -27,6 +28,7 @@ type ListForm = z.infer<typeof listFormSchema>;
 const ListPage: React.FC = () => {
   const { queryParams, updateQueryParams } = useQueryParams<ListQueryParams>();
   const [isEditing, setIsEditing] = React.useState(false);
+  const [orderedGames, setOrderedGames] = React.useState<typeof games>([]);
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -46,6 +48,17 @@ const ListPage: React.FC = () => {
       }
       return ListsService.getCurrentList(id);
     },
+  });
+
+  const { data: games = [] } = useQuery({
+    queryKey: ['games', id],
+    queryFn: () => {
+      if (!id) {
+        return Promise.reject(new Error('ID is required'));
+      }
+      return GamesService.getGamesByList(Number(id));
+    },
+    enabled: !!id,
   });
 
   const form = useForm<ListForm>({
@@ -71,6 +84,31 @@ const ListPage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['lists'] });
     },
   });
+
+  const { mutate: updateGameOrder } = useMutation({
+    mutationFn: (updates: { id: number; orderNumber: number }[]) =>
+      GamesService.updateGameOrder(updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['games', id] });
+    },
+  });
+
+  React.useEffect(() => {
+    if (games) {
+      setOrderedGames(games);
+    }
+  }, [games]);
+
+  const handleReorder = (oldIndex: number, newIndex: number) => {
+    const newOrder = arrayMove(orderedGames, oldIndex, newIndex);
+    setOrderedGames(newOrder);
+    const updates = newOrder.map((game, index) => ({
+      id: game.id,
+      orderNumber: index + 1,
+    }));
+
+    updateGameOrder(updates);
+  };
 
   const handleEditToggle = () => {
     if (isEditing) {
@@ -160,7 +198,7 @@ const ListPage: React.FC = () => {
       </Box>
       <Box mb="xs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
         <Text>
-          {DUMMY_API_GAMES.length} {/*Games*/}
+          {games.length} {t('games.count')}
         </Text>
         <Box style={{ display: 'flex', gap: '1rem' }}>
           <FilterListRightBar queryParams={queryParams} onFilterChange={handleParamsChange} />
@@ -185,9 +223,19 @@ const ListPage: React.FC = () => {
       <Divider mb="md" />
       <Box>
         {viewMode === 'list' ? (
-          <GamesItemList games={DUMMY_API_GAMES} onGameClick={() => {}} />
+          <GamesItemList
+            games={orderedGames}
+            listId={Number(id)}
+            isEditing={isEditing}
+            onReorder={handleReorder}
+          />
         ) : (
-          <GamesCardList games={DUMMY_API_GAMES} onGameClick={() => {}} />
+          <GamesCardList
+            games={orderedGames}
+            listId={Number(id)}
+            isEditing={isEditing}
+            onReorder={handleReorder}
+          />
         )}
       </Box>
     </>

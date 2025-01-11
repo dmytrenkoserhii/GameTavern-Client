@@ -8,7 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { NotFoundReturn, Spinner } from '@/components';
 import { Routes } from '@/enums';
-import { DISPLAY_OPTIONS, GamesCardList, GamesItemList } from '@/features/lists';
+import { GamesCardList, GamesItemList } from '@/features/games';
+import { DISPLAY_OPTIONS } from '@/features/lists';
 import { useQueryParams, useRedirectTimer } from '@/hooks';
 import { GamesQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
 
