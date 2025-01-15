@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BiListPlus, BiTransfer, BiTrash } from 'react-icons/bi';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import {
   ActionIcon,
@@ -27,6 +27,7 @@ import { getGameRoute } from '@/enums';
 import { Game, GamesService } from '@/features/games';
 import { GameApi } from '@/features/games-api';
 import { GetListsRequestData, ListsService } from '@/features/lists';
+import { getImageUrl } from '@/utils';
 
 import styles from './game-card.module.css';
 
@@ -44,21 +45,13 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
   const [selectedList, setSelectedList] = React.useState<string | null>(null);
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  const getImageUrl = () => {
-    if ('image' in game) {
-      return (game as GameApi).image.medium_url;
-    }
-    return (game as Game).coverUrl;
-  };
 
   const { mutate: addToList } = useMutation({
     mutationFn: (targetListId: number) =>
-      GamesService.addGame({
+      GamesService.createGame({
         gameApiId: game.id,
         name: game.name,
-        coverUrl: 'image' in game ? game.image.medium_url : game.coverUrl,
+        coverUrl: getImageUrl(game),
         listId: targetListId,
       }),
     onSuccess: () => {
@@ -77,12 +70,12 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
     },
   });
 
-  const { mutate: removeGame } = useMutation({
-    mutationFn: () => GamesService.removeGame(game.id),
+  const { mutate: deleteGame } = useMutation({
+    mutationFn: () => GamesService.deleteGame(game.id),
     onSuccess: () => {
       notifications.show({
-        title: t('games.game_card.remove_success'),
-        message: t('games.game_card.remove_success_message'),
+        title: t('games.game_card.delete_success'),
+        message: t('games.game_card.delete_success_message'),
         color: 'green',
       });
       queryClient.invalidateQueries({ queryKey: ['games', String(listId)] });
@@ -115,11 +108,42 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
       } as GetListsRequestData),
   });
 
-  const handleCardClick = (e: React.MouseEvent) => {
-    if (!(e.target as HTMLElement).closest('.menu-container')) {
-      navigate(getGameRoute(game.id));
-    }
-  };
+  const allListsOptions = React.useMemo(
+    () =>
+      listsResponse?.items.map((list) => ({
+        value: String(list.id),
+        label: list.name,
+      })) || [],
+    [listsResponse?.items],
+  );
+
+  const filteredListOptions = React.useMemo(
+    () =>
+      listsResponse?.items
+        .filter((list) => list.id !== listId)
+        .map((list) => ({
+          value: String(list.id),
+          label: list.name,
+        })) || [],
+    [listsResponse?.items, listId],
+  );
+
+  const ImageWithOverlay = () => (
+    <>
+      <Image
+        src={getImageUrl(game)}
+        alt={game.name}
+        className={`${styles.image} ${isHovered ? styles.imageHovered : ''}`}
+      />
+      {isHovered && (
+        <Center className={styles.overlay}>
+          <Text fw={700} size="xl" c="white" className={styles.title}>
+            {game.name}
+          </Text>
+        </Center>
+      )}
+    </>
+  );
 
   return (
     <>
@@ -129,71 +153,66 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
         radius="md"
         withBorder
         className={styles.card}
-        onClick={handleCardClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        style={{ cursor: 'pointer' }}
       >
         <Box className={styles.container}>
-          <Image
-            src={getImageUrl()}
-            alt={game.name}
-            className={`${styles.image} ${isHovered ? styles.imageHovered : ''}`}
-          />
+          {isEditing ? (
+            <ImageWithOverlay />
+          ) : (
+            <Link to={getGameRoute(game.id)} style={{ textDecoration: 'none' }}>
+              <ImageWithOverlay />
+            </Link>
+          )}
           {isHovered && (
-            <>
-              <Center className={styles.overlay}>
-                <Text fw={700} size="xl" c="white" className={styles.title}>
-                  {game.name}
-                </Text>
-              </Center>
-              <Stack className={`${styles.menuContainer} menu-container`}>
-                <Menu shadow="md" position="bottom-end" withinPortal>
-                  <Menu.Target>
-                    <ActionIcon variant="filled" color="dark" onClick={(e) => e.stopPropagation()}>
-                      <BsThreeDotsVertical color="white" size={20} />
-                    </ActionIcon>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    {listId ? (
-                      <>
-                        <Menu.Item
-                          leftSection={<BiTransfer size={16} />}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openMoveModal();
-                          }}
-                        >
-                          {t('games.game_card.move_to_list')}
-                        </Menu.Item>
-                        {isEditing && (
-                          <Menu.Item
-                            leftSection={<BiTrash size={16} />}
-                            color="red"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeGame();
-                            }}
-                          >
-                            {t('games.game_card.remove_from_list')}
-                          </Menu.Item>
-                        )}
-                      </>
-                    ) : (
+            <Stack className={styles.menuContainer}>
+              <Menu shadow="md" position="bottom-end" withinPortal>
+                <Menu.Target>
+                  <ActionIcon variant="filled" color="dark">
+                    <BsThreeDotsVertical color="white" size={20} />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  {listId ? (
+                    <>
                       <Menu.Item
-                        leftSection={<BiListPlus size={16} />}
+                        leftSection={<BiTransfer size={16} />}
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
-                          openAddToListModal();
+                          openMoveModal();
                         }}
                       >
-                        {t('games.add_to_list')}
+                        {t('games.game_card.move_to_list')}
                       </Menu.Item>
-                    )}
-                  </Menu.Dropdown>
-                </Menu>
-              </Stack>
-            </>
+                      {isEditing && (
+                        <Menu.Item
+                          leftSection={<BiTrash size={16} />}
+                          color="red"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            deleteGame();
+                          }}
+                        >
+                          {t('games.game_card.delete_from_list')}
+                        </Menu.Item>
+                      )}
+                    </>
+                  ) : (
+                    <Menu.Item
+                      leftSection={<BiListPlus size={16} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openAddToListModal();
+                      }}
+                    >
+                      {t('games.add_to_list')}
+                    </Menu.Item>
+                  )}
+                </Menu.Dropdown>
+              </Menu>
+            </Stack>
           )}
         </Box>
       </Card>
@@ -205,12 +224,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
       >
         <Stack>
           <Select
-            data={
-              listsResponse?.items.map((list) => ({
-                value: String(list.id),
-                label: list.name,
-              })) || []
-            }
+            data={allListsOptions}
             value={selectedList}
             onChange={setSelectedList}
             placeholder={t('games.game_card.select_list_placeholder')}
@@ -231,14 +245,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
       >
         <Stack>
           <Select
-            data={
-              listsResponse?.items
-                .filter((list) => list.id !== listId)
-                .map((list) => ({
-                  value: String(list.id),
-                  label: list.name,
-                })) || []
-            }
+            data={filteredListOptions}
             value={selectedList}
             onChange={setSelectedList}
             placeholder={t('games.game_card.select_list_placeholder')}

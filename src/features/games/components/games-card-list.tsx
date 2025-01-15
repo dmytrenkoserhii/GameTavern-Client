@@ -1,11 +1,21 @@
-import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
+
+import React from 'react';
 
 import { SimpleGrid } from '@mantine/core';
 
-import { Game } from '@/features/games';
 import { GameApi } from '@/features/games-api';
 
+import { Game } from '../types';
 import { GameCard } from './game-card';
 import { SortableGameWrapper } from './sortable-game-wrapper';
 
@@ -24,7 +34,6 @@ export const GamesCardList: React.FC<GamesCardListProps> = ({
 }) => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (!over || active.id === over.id) {
       return;
     }
@@ -37,9 +46,25 @@ export const GamesCardList: React.FC<GamesCardListProps> = ({
     }
   };
 
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  });
+
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor);
+
   return (
-    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-      <SortableContext items={games.map((g) => String(g.id))} strategy={rectSortingStrategy}>
+    <DndContext onDragEnd={handleDragEnd} sensors={sensors} collisionDetection={closestCenter}>
+      <SortableContext items={games.map((game) => String(game.id))} strategy={rectSortingStrategy}>
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 6 }}>
           {games.map((game) => (
             <SortableGameWrapper key={game.id} id={game.id} isEditing={isEditing}>

@@ -1,9 +1,9 @@
 import { privateAxios } from '@/lib';
 
-import { AddGameData, Game } from '../types';
+import { CreateGameData, Game, UpdateGameOrderData } from '../types';
 
 export const GamesService = {
-  async addGame(data: AddGameData) {
+  async createGame(data: CreateGameData) {
     const response = await privateAxios.post<Game>('/games', data);
     return response.data;
   },
@@ -13,7 +13,7 @@ export const GamesService = {
     return response.data;
   },
 
-  async removeGame(gameId: number) {
+  async deleteGame(gameId: number) {
     await privateAxios.delete(`/games/${gameId}`);
   },
 
@@ -24,7 +24,7 @@ export const GamesService = {
     return response.data;
   },
 
-  async updateGameOrder(updates: { id: number; orderNumber: number }[]) {
+  async updateGameOrder(updates: UpdateGameOrderData['updates']) {
     const response = await privateAxios.patch('/games/order', {
       updates,
     });

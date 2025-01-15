@@ -1,6 +1,8 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+import React from 'react';
+
 interface SortableGameWrapperProps {
   id: number;
   isEditing?: boolean;
@@ -26,7 +28,7 @@ export const SortableGameWrapper: React.FC<SortableGameWrapperProps> = ({
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={style} {...attributes} {...(isEditing ? listeners : {})}>
       {children}
     </div>
   );

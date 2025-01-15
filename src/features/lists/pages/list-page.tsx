@@ -29,10 +29,10 @@ const ListPage: React.FC = () => {
   const { queryParams, updateQueryParams } = useQueryParams<ListQueryParams>();
   const [isEditing, setIsEditing] = React.useState(false);
   const [orderedGames, setOrderedGames] = React.useState<typeof games>([]);
+  const [hasOrderChanges, setHasOrderChanges] = React.useState(false);
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
 
@@ -90,6 +90,7 @@ const ListPage: React.FC = () => {
       GamesService.updateGameOrder(updates),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['games', id] });
+      setHasOrderChanges(false);
     },
   });
 
@@ -102,16 +103,19 @@ const ListPage: React.FC = () => {
   const handleReorder = (oldIndex: number, newIndex: number) => {
     const newOrder = arrayMove(orderedGames, oldIndex, newIndex);
     setOrderedGames(newOrder);
-    const updates = newOrder.map((game, index) => ({
-      id: game.id,
-      orderNumber: index + 1,
-    }));
-
-    updateGameOrder(updates);
+    setHasOrderChanges(true);
   };
 
-  const handleEditToggle = () => {
-    if (isEditing) {
+  const handleSaveChanges = () => {
+    if (isEditing && hasOrderChanges) {
+      const updates = orderedGames.map((game, index) => ({
+        id: game.id,
+        orderNumber: index + 1,
+      }));
+      updateGameOrder(updates);
+    }
+
+    if (form.isDirty()) {
       editList({
         id: id!,
         editListData: {
@@ -119,7 +123,14 @@ const ListPage: React.FC = () => {
           description: form.values.description,
         },
       });
-      setIsEditing(false);
+    }
+
+    setIsEditing(false);
+  };
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      handleSaveChanges();
     } else {
       form.setValues({
         name: list?.name || '',
@@ -174,11 +185,23 @@ const ListPage: React.FC = () => {
           </Box>
           <Box style={{ display: 'flex', gap: '10px' }}>
             {isEditing && (
-              <Button variant="outline" color="red" w={180} onClick={handleDelete}>
-                {t('lists.delete_list_button')}
-              </Button>
+              <>
+                <Button variant="outline" color="red" w={180} onClick={handleDelete}>
+                  {t('lists.delete_list_button')}
+                </Button>
+                {hasOrderChanges && (
+                  <Button variant="outline" w={180} onClick={() => setOrderedGames(games)}>
+                    {t('general.cancel_changes')}
+                  </Button>
+                )}
+              </>
             )}
-            <Button variant="outline" w={180} onClick={handleEditToggle}>
+            <Button
+              variant="outline"
+              w={180}
+              onClick={handleEditToggle}
+              disabled={isEditing && !hasOrderChanges && !form.isDirty()}
+            >
               {t(isEditing ? 'general.save_changes' : 'lists.edit_list_button')}
             </Button>
           </Box>

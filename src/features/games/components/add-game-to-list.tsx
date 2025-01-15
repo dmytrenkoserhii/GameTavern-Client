@@ -35,7 +35,7 @@ export const AddGameToList: React.FC<AddGameToListProps> = ({ game }) => {
 
   const { mutate: addGame, isPending } = useMutation({
     mutationFn: (listId: number) =>
-      GamesService.addGame({
+      GamesService.createGame({
         gameApiId: game.id,
         name: game.name,
         coverUrl: game.image.original_url,

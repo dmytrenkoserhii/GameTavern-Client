@@ -1,19 +1,19 @@
 import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
+import React from 'react';
+
 import { Stack } from '@mantine/core';
 
-import { Game } from '@/features/games';
-import { GameApi } from '@/features/games-api';
-
+import { Game } from '../types';
 import { GameItem } from './game-item';
 import { SortableGameWrapper } from './sortable-game-wrapper';
 
 interface GamesItemListProps {
-  games: Game[] | GameApi[];
-  listId?: number;
+  games: Game[];
+  listId: number;
   isEditing?: boolean;
-  onReorder?: (oldIndex: number, newIndex: number) => void;
+  onReorder: (oldIndex: number, newIndex: number) => void;
 }
 
 export const GamesItemList: React.FC<GamesItemListProps> = ({
@@ -28,16 +28,16 @@ export const GamesItemList: React.FC<GamesItemListProps> = ({
       return;
     }
 
-    const oldIndex = games.findIndex((g) => String(g.id) === active.id);
-    const newIndex = games.findIndex((g) => String(g.id) === over.id);
+    const oldIndex = games.findIndex((game) => String(game.id) === active.id);
+    const newIndex = games.findIndex((game) => String(game.id) === over.id);
 
-    onReorder?.(oldIndex, newIndex);
+    onReorder(oldIndex, newIndex);
   };
 
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
       <SortableContext
-        items={games.map((g) => String(g.id))}
+        items={games.map((game) => String(game.id))}
         strategy={verticalListSortingStrategy}
       >
         <Stack>
