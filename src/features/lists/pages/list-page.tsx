@@ -1,3 +1,4 @@
+import { arrayMove } from '@dnd-kit/sortable';
 import { z } from 'zod';
 
 import React from 'react';
@@ -10,13 +11,13 @@ import { useForm, zodResolver } from '@mantine/form';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { DUMMY_API_GAMES } from '@/DUMMY_DATA';
 import { Spinner } from '@/components';
+import { GamesCardList, GamesItemList, GamesService } from '@/features/games';
 import { useQueryParams } from '@/hooks';
 import { ListQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
 import { getErrorMessage } from '@/utils';
 
-import { FilterListRightBar, GamesCardList, GamesItemList } from '../components';
+import { FilterListRightBar } from '../components';
 import { DISPLAY_OPTIONS, SORT_GAMES_OPTIONS } from '../constants';
 import { listFormSchema } from '../schemas';
 import { ListsService } from '../services';
@@ -27,10 +28,11 @@ type ListForm = z.infer<typeof listFormSchema>;
 const ListPage: React.FC = () => {
   const { queryParams, updateQueryParams } = useQueryParams<ListQueryParams>();
   const [isEditing, setIsEditing] = React.useState(false);
+  const [orderedGames, setOrderedGames] = React.useState<typeof games>([]);
+  const [hasOrderChanges, setHasOrderChanges] = React.useState(false);
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
   const { t } = useTranslation();
   const [viewMode, setViewMode] = React.useState<ViewMode>('card');
 
@@ -46,6 +48,17 @@ const ListPage: React.FC = () => {
       }
       return ListsService.getCurrentList(id);
     },
+  });
+
+  const { data: games = [] } = useQuery({
+    queryKey: ['games', id],
+    queryFn: () => {
+      if (!id) {
+        return Promise.reject(new Error('ID is required'));
+      }
+      return GamesService.getGamesByList(Number(id));
+    },
+    enabled: !!id,
   });
 
   const form = useForm<ListForm>({
@@ -72,8 +85,41 @@ const ListPage: React.FC = () => {
     },
   });
 
-  const handleEditToggle = () => {
-    if (isEditing) {
+  const { mutate: updateGameOrder } = useMutation({
+    mutationFn: (updates: { id: number; orderNumber: number }[]) =>
+      GamesService.updateGameOrder(updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['games', id] });
+      setHasOrderChanges(false);
+    },
+  });
+
+  React.useEffect(() => {
+    if (games) {
+      setOrderedGames(games);
+    }
+  }, [games]);
+
+  const handleReorder = (oldIndex: number, newIndex: number) => {
+    const newOrder = arrayMove(orderedGames, oldIndex, newIndex);
+    setOrderedGames(newOrder);
+
+    const hasChanged =
+      JSON.stringify(newOrder.map((g) => g.id)) !== JSON.stringify(games.map((g) => g.id));
+
+    setHasOrderChanges(hasChanged);
+  };
+
+  const handleSaveChanges = () => {
+    if (isEditing && hasOrderChanges) {
+      const updates = orderedGames.map((game, index) => ({
+        id: game.id,
+        orderNumber: index + 1,
+      }));
+      updateGameOrder(updates);
+    }
+
+    if (form.isDirty()) {
       editList({
         id: id!,
         editListData: {
@@ -81,7 +127,14 @@ const ListPage: React.FC = () => {
           description: form.values.description,
         },
       });
-      setIsEditing(false);
+    }
+
+    setIsEditing(false);
+  };
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      handleSaveChanges();
     } else {
       form.setValues({
         name: list?.name || '',
@@ -89,6 +142,11 @@ const ListPage: React.FC = () => {
       });
       setIsEditing(true);
     }
+  };
+
+  const handleCancelChanges = () => {
+    setOrderedGames(games);
+    setHasOrderChanges(false);
   };
 
   const handleDelete = () => {
@@ -136,11 +194,23 @@ const ListPage: React.FC = () => {
           </Box>
           <Box style={{ display: 'flex', gap: '10px' }}>
             {isEditing && (
-              <Button variant="outline" color="red" w={180} onClick={handleDelete}>
-                {t('lists.delete_list_button')}
-              </Button>
+              <>
+                <Button variant="outline" color="red" w={180} onClick={handleDelete}>
+                  {t('lists.delete_list_button')}
+                </Button>
+                {hasOrderChanges && (
+                  <Button variant="outline" w={180} onClick={handleCancelChanges}>
+                    {t('general.cancel_changes')}
+                  </Button>
+                )}
+              </>
             )}
-            <Button variant="outline" w={180} onClick={handleEditToggle}>
+            <Button
+              variant="outline"
+              w={180}
+              onClick={handleEditToggle}
+              disabled={isEditing && !hasOrderChanges && !form.isDirty()}
+            >
               {t(isEditing ? 'general.save_changes' : 'lists.edit_list_button')}
             </Button>
           </Box>
@@ -160,7 +230,7 @@ const ListPage: React.FC = () => {
       </Box>
       <Box mb="xs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
         <Text>
-          {DUMMY_API_GAMES.length} {/*Games*/}
+          {games.length} {t('games.count')}
         </Text>
         <Box style={{ display: 'flex', gap: '1rem' }}>
           <FilterListRightBar queryParams={queryParams} onFilterChange={handleParamsChange} />
@@ -185,9 +255,19 @@ const ListPage: React.FC = () => {
       <Divider mb="md" />
       <Box>
         {viewMode === 'list' ? (
-          <GamesItemList games={DUMMY_API_GAMES} onGameClick={() => {}} />
+          <GamesItemList
+            games={orderedGames}
+            listId={Number(id)}
+            isEditing={isEditing}
+            onReorder={handleReorder}
+          />
         ) : (
-          <GamesCardList games={DUMMY_API_GAMES} onGameClick={() => {}} />
+          <GamesCardList
+            games={orderedGames}
+            listId={Number(id)}
+            isEditing={isEditing}
+            onReorder={handleReorder}
+          />
         )}
       </Box>
     </>

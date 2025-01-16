@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { NotFoundReturn, Spinner } from '@/components';
 import { Routes } from '@/enums';
+import { AddGameToList } from '@/features/games';
 import { useRedirectTimer } from '@/hooks';
 
 // import { Routes } from '@/enums';
@@ -68,6 +69,7 @@ const GamePage: React.FC = () => {
             borderRadius: '8px',
           }}
         />
+        {game && <AddGameToList game={game} />}
       </Box>
       <Box style={{ flex: 1 }}>
         <Title order={1}>{game?.name}</Title>
