@@ -27,8 +27,8 @@ import { getGameRoute } from '@/enums';
 import { Game, GamesService } from '@/features/games';
 import { GameApi } from '@/features/games-api';
 import { GetListsRequestData, ListsService } from '@/features/lists';
-import { getImageUrl } from '@/utils';
 
+import { getImageUrl } from '../utils';
 import styles from './game-card.module.css';
 
 export interface GameCardProps {
@@ -128,6 +128,23 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
     [listsResponse?.items, listId],
   );
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteGame();
+  };
+
+  const handleAddToList = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    openAddToListModal();
+  };
+
+  const handleMove = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openMoveModal();
+  };
+
   const ImageWithOverlay = () => (
     <>
       <Image
@@ -160,7 +177,10 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
           {isEditing ? (
             <ImageWithOverlay />
           ) : (
-            <Link to={getGameRoute(game.id)} style={{ textDecoration: 'none' }}>
+            <Link
+              to={getGameRoute('gameApiId' in game ? game.gameApiId : game.id)}
+              style={{ textDecoration: 'none' }}
+            >
               <ImageWithOverlay />
             </Link>
           )}
@@ -175,39 +195,22 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
                 <Menu.Dropdown>
                   {listId ? (
                     <>
-                      <Menu.Item
-                        leftSection={<BiTransfer size={16} />}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          openMoveModal();
-                        }}
-                      >
+                      <Menu.Item leftSection={<BiTransfer size={16} />} onClick={handleMove}>
                         {t('games.game_card.move_to_list')}
                       </Menu.Item>
                       {isEditing && (
                         <Menu.Item
                           leftSection={<BiTrash size={16} />}
                           color="red"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            deleteGame();
-                          }}
+                          onClick={handleDelete}
                         >
                           {t('games.game_card.delete_from_list')}
                         </Menu.Item>
                       )}
                     </>
                   ) : (
-                    <Menu.Item
-                      leftSection={<BiListPlus size={16} />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openAddToListModal();
-                      }}
-                    >
-                      {t('games.add_to_list')}
+                    <Menu.Item leftSection={<BiListPlus size={16} />} onClick={handleAddToList}>
+                      {t('games.game_card.move_to_list')}
                     </Menu.Item>
                   )}
                 </Menu.Dropdown>

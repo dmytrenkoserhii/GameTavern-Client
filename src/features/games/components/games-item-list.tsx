@@ -1,4 +1,12 @@
-import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import React from 'react';
@@ -22,6 +30,22 @@ export const GamesItemList: React.FC<GamesItemListProps> = ({
   isEditing,
   onReorder,
 }) => {
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  });
+
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor);
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) {
@@ -35,7 +59,7 @@ export const GamesItemList: React.FC<GamesItemListProps> = ({
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
+    <DndContext onDragEnd={handleDragEnd} sensors={sensors} collisionDetection={closestCenter}>
       <SortableContext
         items={games.map((game) => String(game.id))}
         strategy={verticalListSortingStrategy}

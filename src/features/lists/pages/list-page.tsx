@@ -103,7 +103,11 @@ const ListPage: React.FC = () => {
   const handleReorder = (oldIndex: number, newIndex: number) => {
     const newOrder = arrayMove(orderedGames, oldIndex, newIndex);
     setOrderedGames(newOrder);
-    setHasOrderChanges(true);
+
+    const hasChanged =
+      JSON.stringify(newOrder.map((g) => g.id)) !== JSON.stringify(games.map((g) => g.id));
+
+    setHasOrderChanges(hasChanged);
   };
 
   const handleSaveChanges = () => {
@@ -138,6 +142,11 @@ const ListPage: React.FC = () => {
       });
       setIsEditing(true);
     }
+  };
+
+  const handleCancelChanges = () => {
+    setOrderedGames(games);
+    setHasOrderChanges(false);
   };
 
   const handleDelete = () => {
@@ -190,7 +199,7 @@ const ListPage: React.FC = () => {
                   {t('lists.delete_list_button')}
                 </Button>
                 {hasOrderChanges && (
-                  <Button variant="outline" w={180} onClick={() => setOrderedGames(games)}>
+                  <Button variant="outline" w={180} onClick={handleCancelChanges}>
                     {t('general.cancel_changes')}
                   </Button>
                 )}

@@ -24,7 +24,7 @@ export const GamesService = {
     return response.data;
   },
 
-  async updateGameOrder(updates: UpdateGameOrderData['updates']) {
+  async updateGameOrder(updates: UpdateGameOrderData[]) {
     const response = await privateAxios.patch('/games/order', {
       updates,
     });
