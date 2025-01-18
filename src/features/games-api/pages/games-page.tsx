@@ -7,7 +7,7 @@ import { Box, Divider, Pagination, Select, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { NotFoundReturn, Spinner } from '@/components';
-import { Routes } from '@/enums';
+import { QueryKeys, Routes } from '@/enums';
 import { GamesCardList, GamesItemList } from '@/features/games';
 import { DISPLAY_OPTIONS } from '@/features/lists';
 import { useQueryParams, useRedirectTimer } from '@/hooks';
@@ -55,7 +55,7 @@ const GamesPage: React.FC = () => {
     isError,
     isLoading,
   } = useQuery({
-    queryKey: ['games', queryParams],
+    queryKey: [QueryKeys.GAMES, queryParams],
     queryFn: () => GamesApiService.getAllGames(getGamesRequestData),
   });
 

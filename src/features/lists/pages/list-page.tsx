@@ -12,6 +12,7 @@ import { useForm, zodResolver } from '@mantine/form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Spinner } from '@/components';
+import { QueryKeys } from '@/enums';
 import { GamesCardList, GamesItemList, GamesService } from '@/features/games';
 import { useQueryParams } from '@/hooks';
 import { ListQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
@@ -41,7 +42,7 @@ const ListPage: React.FC = () => {
     error,
     isLoading,
   } = useQuery<List>({
-    queryKey: ['list', id],
+    queryKey: [QueryKeys.LIST, id],
     queryFn: () => {
       if (!id) {
         return Promise.reject(new Error('ID is required'));
@@ -51,7 +52,7 @@ const ListPage: React.FC = () => {
   });
 
   const { data: games = [] } = useQuery({
-    queryKey: ['games', id],
+    queryKey: [QueryKeys.GAMES, id],
     queryFn: () => {
       if (!id) {
         return Promise.reject(new Error('ID is required'));
@@ -73,7 +74,7 @@ const ListPage: React.FC = () => {
     mutationFn: ({ id, editListData }: { id: string; editListData: EditListRequestData }) =>
       ListsService.editList(id, editListData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['list', id] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.LIST, id] });
     },
   });
 
@@ -81,7 +82,7 @@ const ListPage: React.FC = () => {
     mutationFn: (id: string) => ListsService.deleteList(id),
     onSuccess: () => {
       navigate('/lists');
-      queryClient.invalidateQueries({ queryKey: ['lists'] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.LISTS] });
     },
   });
 
@@ -89,7 +90,7 @@ const ListPage: React.FC = () => {
     mutationFn: (updates: { id: number; orderNumber: number }[]) =>
       GamesService.updateGameOrder(updates),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['games', id] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GAMES, id] });
       setHasOrderChanges(false);
     },
   });

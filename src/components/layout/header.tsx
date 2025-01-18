@@ -10,6 +10,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 
 import logo from '@/assets/logo.png';
+import { QueryKeys } from '@/enums';
 import { Routes, getGameRoute } from '@/enums/routes.enum';
 import { GamesApiService } from '@/features/games-api';
 import { User, UsersService } from '@/features/user';
@@ -26,13 +27,13 @@ export const Header: React.FC = () => {
   const autocompleteRef = React.useRef<HTMLInputElement>(null);
 
   const { data: user } = useQuery<User>({
-    queryKey: ['user'],
+    queryKey: [QueryKeys.USER],
     queryFn: () => UsersService.getCurrentUser(),
     retry: false,
   });
 
   const { data: searchedGames } = useQuery({
-    queryKey: ['searchedGames', debouncedSearch],
+    queryKey: [QueryKeys.SEARCHED_GAMES, debouncedSearch],
     queryFn: () =>
       GamesApiService.getAllGames({
         page: '1',

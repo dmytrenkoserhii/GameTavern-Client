@@ -6,7 +6,7 @@ import { Box, Button, Stack } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { NAVBAR_LINKS } from '@/constants';
-import { Routes } from '@/enums';
+import { QueryKeys, Routes } from '@/enums';
 import { AuthService } from '@/features/authentication';
 import { User, UsersService } from '@/features/user';
 
@@ -19,7 +19,7 @@ export const Navbar: React.FC = () => {
   const queryClient = useQueryClient();
 
   const { data: user } = useQuery<User>({
-    queryKey: ['user'],
+    queryKey: [QueryKeys.USER],
     queryFn: () => UsersService.getCurrentUser(),
     retry: false,
   });
@@ -27,8 +27,8 @@ export const Navbar: React.FC = () => {
   const { mutate: logout } = useMutation({
     mutationFn: () => AuthService.logout(),
     onSuccess: () => {
-      queryClient.setQueryData(['user'], null);
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.setQueryData([QueryKeys.USER], null);
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.USER] });
       navigate(Routes.LOGIN);
     },
     onError: (error: Error) => {

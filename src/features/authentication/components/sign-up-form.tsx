@@ -23,6 +23,7 @@ import { notifications } from '@mantine/notifications';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { QueryKeys } from '@/enums';
 import { Routes } from '@/enums/routes.enum';
 
 import { SignUpFormSchema } from '../schemas';
@@ -49,7 +50,7 @@ export const SignUpForm: React.FC = () => {
   const { mutate: signUp } = useMutation({
     mutationFn: (signUpData: SignUpRequestData) => AuthService.signUp(signUpData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.USER] });
     },
     onError: (error: Error) => {
       notifications.show({

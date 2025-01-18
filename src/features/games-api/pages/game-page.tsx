@@ -8,7 +8,7 @@ import { Box, Title } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { NotFoundReturn, Spinner } from '@/components';
-import { Routes } from '@/enums';
+import { QueryKeys, Routes } from '@/enums';
 import { AddGameToList } from '@/features/games';
 import { useRedirectTimer } from '@/hooks';
 
@@ -28,7 +28,7 @@ const GamePage: React.FC = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['game', id],
+    queryKey: [QueryKeys.GAME, id],
     queryFn: () => {
       if (!id) {
         return;

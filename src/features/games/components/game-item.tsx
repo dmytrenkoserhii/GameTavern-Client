@@ -23,7 +23,7 @@ import { notifications } from '@mantine/notifications';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { getGameRoute } from '@/enums';
+import { QueryKeys, getGameRoute } from '@/enums';
 import { Game, GamesService } from '@/features/games';
 import { GameApi } from '@/features/games-api';
 import { GetListsRequestData, ListsService } from '@/features/lists';
@@ -45,7 +45,7 @@ export const GameItem: React.FC<GameItemProps> = ({ game, listId, isEditing }) =
   const [moveModalOpened, { open: openMoveModal, close: closeMoveModal }] = useDisclosure(false);
 
   const { data: listsResponse } = useQuery({
-    queryKey: ['lists'],
+    queryKey: [QueryKeys.LISTS],
     queryFn: () =>
       ListsService.getLists({
         page: 1,
@@ -62,7 +62,7 @@ export const GameItem: React.FC<GameItemProps> = ({ game, listId, isEditing }) =
         message: t('games.game_card.delete_success_message'),
         color: 'green',
       });
-      queryClient.invalidateQueries({ queryKey: ['games', String(listId)] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GAMES, String(listId)] });
     },
   });
 
@@ -74,7 +74,7 @@ export const GameItem: React.FC<GameItemProps> = ({ game, listId, isEditing }) =
         message: t('games.game_card.move_success_message'),
         color: 'green',
       });
-      queryClient.invalidateQueries({ queryKey: ['games'] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GAMES] });
       setSelectedList(null);
       closeMoveModal();
     },
@@ -96,10 +96,10 @@ export const GameItem: React.FC<GameItemProps> = ({ game, listId, isEditing }) =
       });
       closeAddToListModal();
       queryClient.invalidateQueries({
-        queryKey: ['games', String(listId)],
+        queryKey: [QueryKeys.GAMES, String(listId)],
       });
       queryClient.invalidateQueries({
-        queryKey: ['lists'],
+        queryKey: [QueryKeys.LISTS],
       });
     },
   });

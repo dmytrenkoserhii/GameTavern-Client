@@ -2,6 +2,7 @@ import { Center } from '@mantine/core';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 
+import { QueryKeys } from '@/enums';
 import { User, UsersService } from '@/features/user';
 
 import { PaymentCard } from '../components';
@@ -9,7 +10,7 @@ import { PaymentsService } from '../services';
 
 const SubscriptionPage: React.FC = () => {
   const { data: user } = useQuery<User>({
-    queryKey: ['user'],
+    queryKey: [QueryKeys.USER],
     queryFn: () => UsersService.getCurrentUser(),
     retry: false,
   });
