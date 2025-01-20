@@ -19,9 +19,6 @@ const ResetPasswordPage = React.lazy(
 const EmailConfirmation = React.lazy(
   () => import('@/features/authentication/pages/email-confirmation-page'),
 );
-const EmailVerification = React.lazy(
-  () => import('@/features/authentication/pages/email-verification-page'),
-);
 const SubscriptionPage = React.lazy(() => import('@/features/payments/pages/subscription-page'));
 const ListsPage = React.lazy(() => import('@/features/lists/pages/lists-page'));
 const ListPage = React.lazy(() => import('@/features/lists/pages/list-page'));
@@ -154,7 +151,7 @@ export const CLIENT_ROUTES: RouteObject[] = [
         ),
       },
       {
-        path: Routes.RESET_PASSWORD,
+        path: `${Routes.RESET_PASSWORD}/:token`,
         element: (
           <React.Suspense fallback={<Spinner />}>
             <ResetPasswordPage />
@@ -166,14 +163,6 @@ export const CLIENT_ROUTES: RouteObject[] = [
         element: (
           <React.Suspense fallback={<Spinner />}>
             <EmailConfirmation />
-          </React.Suspense>
-        ),
-      },
-      {
-        path: Routes.VERIFY_EMAIL,
-        element: (
-          <React.Suspense fallback={<Spinner />}>
-            <EmailVerification />
           </React.Suspense>
         ),
       },
