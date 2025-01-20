@@ -1,7 +1,12 @@
 import { User } from '@/features/user';
 import { privateAxios, publicAxios } from '@/lib';
 
-import { SignInRequestData, SignUpRequestData } from '../types';
+import {
+  ForgotPasswordRequestData,
+  ResetPasswordRequestData,
+  SignInRequestData,
+  SignUpRequestData,
+} from '../types';
 
 export const AuthService = {
   async signUp(signUpData: SignUpRequestData) {
@@ -12,5 +17,12 @@ export const AuthService = {
   },
   async logout() {
     return privateAxios.get('/auth/logout');
+  },
+  async forgotPassword(data: ForgotPasswordRequestData) {
+    return publicAxios.post('/auth/forgot-password', data);
+  },
+
+  async resetPassword(data: ResetPasswordRequestData) {
+    return publicAxios.post('/auth/reset-password', data);
   },
 };

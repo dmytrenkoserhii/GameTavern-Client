@@ -6,8 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, Paper, Stack, Text, TextInput, Title } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+
+import { useMutation } from '@tanstack/react-query';
 
 import { ForgotPasswordSchema } from '../schemas';
+import { AuthService } from '../services';
 
 type ForgotPasswordFormData = z.infer<typeof ForgotPasswordSchema>;
 
@@ -21,9 +25,27 @@ export const ForgotPasswordForm: React.FC = () => {
     },
   });
 
+  const { mutate: forgotPassword, isPending } = useMutation({
+    mutationFn: AuthService.forgotPassword,
+    onSuccess: () => {
+      notifications.show({
+        title: t('auth.forgot_password.success_title'),
+        message: t('auth.forgot_password.success_message'),
+        color: 'green',
+      });
+      form.reset();
+    },
+    onError: () => {
+      notifications.show({
+        title: t('auth.forgot_password.error_title'),
+        message: t('auth.forgot_password.error_message'),
+        color: 'red',
+      });
+    },
+  });
+
   const handleSubmit = form.onSubmit((values) => {
-    // eslint-disable-next-line no-console
-    console.log(values);
+    forgotPassword(values);
   });
 
   return (
@@ -44,7 +66,7 @@ export const ForgotPasswordForm: React.FC = () => {
             {...form.getInputProps('email')}
           />
 
-          <Button type="submit" fullWidth mt="xl">
+          <Button type="submit" fullWidth mt="xl" loading={isPending}>
             {t('auth.forgot_password.submit_button')}
           </Button>
         </Stack>
