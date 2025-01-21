@@ -49,6 +49,10 @@ export const GamesItemList: React.FC<GamesItemListProps> = ({
   const sensors = useSensors(mouseSensor, touchSensor);
 
   const handleDragEnd = (event: DragEndEvent) => {
+    if (!onReorder) {
+      return;
+    }
+
     const { active, over } = event;
     if (!over || active.id === over.id) {
       return;
@@ -57,9 +61,7 @@ export const GamesItemList: React.FC<GamesItemListProps> = ({
     const oldIndex = games.findIndex((game) => String(game.id) === active.id);
     const newIndex = games.findIndex((game) => String(game.id) === over.id);
 
-    if (onReorder) {
-      onReorder(oldIndex, newIndex);
-    }
+    onReorder(oldIndex, newIndex);
   };
 
   return (
