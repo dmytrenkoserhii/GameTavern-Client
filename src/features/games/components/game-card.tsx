@@ -23,7 +23,7 @@ import { notifications } from '@mantine/notifications';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { getGameRoute } from '@/enums';
+import { QueryKeys, getGameRoute } from '@/enums';
 import { Game, GamesService } from '@/features/games';
 import { GameApi } from '@/features/games-api';
 import { GetListsRequestData, ListsService } from '@/features/lists';
@@ -62,10 +62,10 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
       });
       closeAddToListModal();
       queryClient.invalidateQueries({
-        queryKey: ['games', String(listId)],
+        queryKey: [QueryKeys.GAMES, String(listId)],
       });
       queryClient.invalidateQueries({
-        queryKey: ['lists'],
+        queryKey: [QueryKeys.LISTS],
       });
     },
   });
@@ -78,7 +78,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
         message: t('games.game_card.delete_success_message'),
         color: 'green',
       });
-      queryClient.invalidateQueries({ queryKey: ['games', String(listId)] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GAMES, String(listId)] });
     },
   });
 
@@ -91,7 +91,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
         color: 'green',
       });
       queryClient.invalidateQueries({
-        queryKey: ['games'],
+        queryKey: [QueryKeys.GAMES],
       });
       setSelectedList(null);
       closeMoveModal();
@@ -99,7 +99,7 @@ export const GameCard: React.FC<GameCardProps> = ({ game, listId, isEditing }) =
   });
 
   const { data: listsResponse } = useQuery({
-    queryKey: ['lists'],
+    queryKey: [QueryKeys.LISTS],
     queryFn: () =>
       ListsService.getLists({
         page: 1,

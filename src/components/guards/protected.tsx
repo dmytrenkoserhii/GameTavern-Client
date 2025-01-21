@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { useQuery } from '@tanstack/react-query';
 
-import { Routes } from '@/enums';
+import { QueryKeys, Routes } from '@/enums';
 import { Role, User, UsersService } from '@/features/user';
 
 import { Spinner } from '../spinner';
@@ -14,7 +14,7 @@ interface ProtectedProps {
 
 export const Protected: React.FC<ProtectedProps> = ({ roles, isPremium }) => {
   const { data: user, isLoading } = useQuery<User>({
-    queryKey: ['user'],
+    queryKey: [QueryKeys.USER],
     queryFn: () => UsersService.getCurrentUser(),
     retry: false,
   });

@@ -7,6 +7,7 @@ import { Box, Button, Divider, Pagination, Select, Text } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Spinner } from '@/components';
+import { QueryKeys } from '@/enums';
 import { useQueryParams } from '@/hooks';
 import { SelectItemWithIcon, ViewMode } from '@/types';
 import { getErrorMessage } from '@/utils';
@@ -43,14 +44,14 @@ const ListsPage: React.FC = () => {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ['lists', queryParams.sort, queryParams.limit, queryParams.page],
+    queryKey: [QueryKeys.LISTS, queryParams.sort, queryParams.limit, queryParams.page],
     queryFn: () => ListsService.getLists(getListsRequestData),
   });
 
   const { mutate: createList } = useMutation({
     mutationFn: (createListData: CreateListRequestData) => ListsService.createList(createListData),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['lists'] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.LISTS] });
     },
     onError: (error) => {
       // eslint-disable-next-line no-console

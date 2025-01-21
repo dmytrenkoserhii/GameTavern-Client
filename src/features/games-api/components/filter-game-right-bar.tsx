@@ -7,6 +7,7 @@ import { useForm } from '@mantine/form';
 
 import { useQuery } from '@tanstack/react-query';
 
+import { QueryKeys } from '@/enums';
 import { ListFilterData, ListQueryParams } from '@/types';
 import { generateYearsOptions } from '@/utils';
 
@@ -35,7 +36,7 @@ export const FilterGameRightBar: React.FC<FilterGameRightBarProps> = ({
   const [isOpened, setIsOpened] = React.useState(false);
 
   const { data: platforms } = useQuery({
-    queryKey: ['platforms'],
+    queryKey: [QueryKeys.PLATFORMS],
     queryFn: () => GamesApiService.getAllPlatforms(),
   });
 
