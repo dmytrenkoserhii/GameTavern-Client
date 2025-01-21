@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Button, Center, Container, Loader, Stack, Text, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -14,11 +14,10 @@ import { UsersService } from '@/features/user';
 const EmailConfirmation = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams] = useSearchParams();
 
   const token = searchParams.get('token');
-  const email = location.state?.email;
+  const email = searchParams.get('email');
 
   const confirmEmail = useMutation({
     mutationFn: (token: string) => UsersService.confirmUserEmail({ token }),
