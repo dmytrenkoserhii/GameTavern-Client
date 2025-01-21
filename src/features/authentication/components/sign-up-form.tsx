@@ -23,6 +23,7 @@ import { notifications } from '@mantine/notifications';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { QueryKeys } from '@/enums';
 import { Routes } from '@/enums/routes.enum';
 
 import { SignUpFormSchema } from '../schemas';

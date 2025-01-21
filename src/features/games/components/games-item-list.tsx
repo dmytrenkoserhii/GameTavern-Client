@@ -13,15 +13,17 @@ import React from 'react';
 
 import { Stack } from '@mantine/core';
 
+import { GameApi } from '@/features/games-api';
+
 import { Game } from '../types';
 import { GameItem } from './game-item';
 import { SortableGameWrapper } from './sortable-game-wrapper';
 
 interface GamesItemListProps {
-  games: Game[];
-  listId: number;
+  games: Game[] | GameApi[];
+  listId?: number;
   isEditing?: boolean;
-  onReorder: (oldIndex: number, newIndex: number) => void;
+  onReorder?: (oldIndex: number, newIndex: number) => void;
 }
 
 export const GamesItemList: React.FC<GamesItemListProps> = ({
@@ -47,6 +49,10 @@ export const GamesItemList: React.FC<GamesItemListProps> = ({
   const sensors = useSensors(mouseSensor, touchSensor);
 
   const handleDragEnd = (event: DragEndEvent) => {
+    if (!onReorder) {
+      return;
+    }
+
     const { active, over } = event;
     if (!over || active.id === over.id) {
       return;

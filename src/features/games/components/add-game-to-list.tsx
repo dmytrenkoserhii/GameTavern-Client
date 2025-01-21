@@ -8,6 +8,7 @@ import { notifications } from '@mantine/notifications';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { QueryKeys } from '@/enums';
 import { GameApi } from '@/features/games-api';
 import { GetListsRequestData, ListsService } from '@/features/lists';
 
@@ -24,7 +25,7 @@ export const AddGameToList: React.FC<AddGameToListProps> = ({ game }) => {
   const queryClient = useQueryClient();
 
   const { data: lists } = useQuery({
-    queryKey: ['lists'],
+    queryKey: [QueryKeys.LISTS],
     queryFn: () =>
       ListsService.getLists({
         page: 1,
@@ -47,8 +48,8 @@ export const AddGameToList: React.FC<AddGameToListProps> = ({ game }) => {
         message: t('games.add_success_message'),
         color: 'green',
       });
-      queryClient.invalidateQueries({ queryKey: ['lists'] });
-      queryClient.invalidateQueries({ queryKey: ['games', String(listId)] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.LISTS] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.GAMES, String(listId)] });
       close();
     },
     onError: () => {
