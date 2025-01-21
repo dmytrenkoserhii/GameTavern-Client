@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Anchor,
@@ -35,6 +35,7 @@ type SignUpFormData = z.infer<typeof SignUpFormSchema>;
 export const SignUpForm: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const form = useForm<SignUpFormData>({
     validate: zodResolver(SignUpFormSchema),
@@ -49,8 +50,9 @@ export const SignUpForm: React.FC = () => {
 
   const { mutate: signUp } = useMutation({
     mutationFn: (signUpData: SignUpRequestData) => AuthService.signUp(signUpData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QueryKeys.USER] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      navigate(`${Routes.CONFIRM_EMAIL}?email=${encodeURIComponent(variables.email)}`);
     },
     onError: (error: Error) => {
       notifications.show({
