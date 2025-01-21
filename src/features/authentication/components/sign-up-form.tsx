@@ -51,7 +51,7 @@ export const SignUpForm: React.FC = () => {
   const { mutate: signUp } = useMutation({
     mutationFn: (signUpData: SignUpRequestData) => AuthService.signUp(signUpData),
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+      queryClient.invalidateQueries({ queryKey: [QueryKeys.USER] });
       navigate(`${Routes.CONFIRM_EMAIL}?email=${encodeURIComponent(variables.email)}`);
     },
     onError: (error: Error) => {
