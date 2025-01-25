@@ -1,7 +1,13 @@
 import { privateAxios } from '@/lib';
 import { PaginatedResponse } from '@/types';
 
-import { CreateListRequestData, EditListRequestData, GetListsRequestData, List } from '../types';
+import {
+  CreateListRequestData,
+  EditListRequestData,
+  GameRecommendation,
+  GetListsRequestData,
+  List,
+} from '../types';
 
 export const ListsService = {
   async getLists(queryParams: GetListsRequestData): Promise<PaginatedResponse<List>> {
@@ -13,6 +19,20 @@ export const ListsService = {
 
   async getCurrentList(id: string): Promise<List> {
     const response = await privateAxios.get<List>(`/lists/${id}`);
+    return response.data;
+  },
+
+  async getGamesRecommendations(
+    games: string[],
+    existingRecommendations?: string[],
+  ): Promise<GameRecommendation[]> {
+    const response = await privateAxios.post<GameRecommendation[]>(
+      '/ai/list-games-recommendations',
+      {
+        games,
+        existingRecommendations,
+      },
+    );
     return response.data;
   },
 
