@@ -3,3 +3,4 @@ export { ListCard } from './list-card';
 export { ListsItemView } from './lists-item-view';
 export { ListCardView } from './lists-card-view';
 export { FilterListRightBar } from './filter-list-right-bar';
+export { GameRecommendationsModal } from './game-recommendations-modal';
