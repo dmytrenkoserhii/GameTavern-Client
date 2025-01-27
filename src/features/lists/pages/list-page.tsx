@@ -18,7 +18,7 @@ import { useQueryParams } from '@/hooks';
 import { ListQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
 import { getErrorMessage } from '@/utils';
 
-import { FilterListRightBar } from '../components';
+import { FilterListRightBar, GameRecommendationsModal } from '../components';
 import { DISPLAY_OPTIONS, SORT_GAMES_OPTIONS } from '../constants';
 import { listFormSchema } from '../schemas';
 import { ListsService } from '../services';
@@ -194,6 +194,7 @@ const ListPage: React.FC = () => {
             )}
           </Box>
           <Box style={{ display: 'flex', gap: '10px' }}>
+            {games.length > 0 && <GameRecommendationsModal games={games} />}
             {isEditing && (
               <>
                 <Button variant="outline" color="red" w={180} onClick={handleDelete}>
