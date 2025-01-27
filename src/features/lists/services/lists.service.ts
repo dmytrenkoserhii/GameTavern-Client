@@ -1,12 +1,13 @@
+import { GameApi } from '@/features/games-api';
 import { privateAxios } from '@/lib';
 import { PaginatedResponse } from '@/types';
 
 import {
   CreateListRequestData,
   EditListRequestData,
-  GameRecommendation,
   GetListsRequestData,
   List,
+  RecommendationsParams,
 } from '../types';
 
 export const ListsService = {
@@ -22,17 +23,8 @@ export const ListsService = {
     return response.data;
   },
 
-  async getGamesRecommendations(
-    games: string[],
-    existingRecommendations?: string[],
-  ): Promise<GameRecommendation[]> {
-    const response = await privateAxios.post<GameRecommendation[]>(
-      '/ai/list-games-recommendations',
-      {
-        games,
-        existingRecommendations,
-      },
-    );
+  async getGamesRecommendations(params: RecommendationsParams): Promise<GameApi[]> {
+    const response = await privateAxios.post<GameApi[]>('/ai/list-games-recommendations', params);
     return response.data;
   },
 

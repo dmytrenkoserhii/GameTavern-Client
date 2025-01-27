@@ -10,9 +10,10 @@ import { useMutation } from '@tanstack/react-query';
 
 import { Spinner } from '@/components';
 import { Game, GameCard } from '@/features/games';
+import { GameApi } from '@/features/games-api';
 
 import { ListsService } from '../services';
-import { GameRecommendation, RecommendationsParams } from '../types';
+import { RecommendationsParams } from '../types';
 
 interface GameRecommendationsModalProps {
   games: Game[];
@@ -20,14 +21,11 @@ interface GameRecommendationsModalProps {
 
 export const GameRecommendationsModal: React.FC<GameRecommendationsModalProps> = ({ games }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [existingRecommendations, setExistingRecommendations] = React.useState<
-    GameRecommendation[]
-  >([]);
+  const [existingRecommendations, setExistingRecommendations] = React.useState<GameApi[]>([]);
   const { t } = useTranslation();
 
   const { mutate: getRecommendations, isPending } = useMutation({
-    mutationFn: (params: RecommendationsParams) =>
-      ListsService.getGamesRecommendations(params.games, params.existingRecommendations),
+    mutationFn: (params: RecommendationsParams) => ListsService.getGamesRecommendations(params),
     onSuccess: (newRecommendations) => {
       setExistingRecommendations((prev) => [...prev, ...newRecommendations]);
     },
@@ -37,6 +35,7 @@ export const GameRecommendationsModal: React.FC<GameRecommendationsModalProps> =
     const gameNames = games.map((game) => game.name);
 
     open();
+
     setExistingRecommendations([]);
 
     getRecommendations({ games: gameNames });
@@ -76,17 +75,7 @@ export const GameRecommendationsModal: React.FC<GameRecommendationsModalProps> =
           <>
             <SimpleGrid cols={5} spacing="md">
               {existingRecommendations.map((game, index) => (
-                <GameCard
-                  key={`${game.gameApiId}-${index}`}
-                  game={{
-                    id: index,
-                    gameApiId: game.gameApiId,
-                    name: game.name,
-                    coverUrl: game.coverUrl ?? '',
-                    orderNumber: index + 1,
-                    listId: 0,
-                  }}
-                />
+                <GameCard key={`${game.id}-${index}`} game={game} />
               ))}
             </SimpleGrid>
 
