@@ -1,18 +1,19 @@
+import { DateTime } from 'luxon';
+
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Box, Title } from '@mantine/core';
+import { Box, Center, Flex, Text, Title } from '@mantine/core';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { NotFoundReturn, Spinner } from '@/components';
 import { QueryKeys, Routes } from '@/enums';
-import { AddGameToList } from '@/features/games';
+import { AddGameToList, GameCard, GameMetaData } from '@/features/games';
 import { useRedirectTimer } from '@/hooks';
 
-// import { Routes } from '@/enums';
 import { GamesApiService } from '../services';
 
 const GamePage: React.FC = () => {
@@ -37,11 +38,39 @@ const GamePage: React.FC = () => {
     },
   });
 
+  const { data: similarGamesData } = useQuery({
+    queryKey: [QueryKeys.SIMILAR_GAMES, game?.similar_games],
+    queryFn: async () => {
+      if (!game?.similar_games) {
+        return [];
+      }
+
+      const similarGames = await Promise.all(
+        game.similar_games.map(async (similarGame) => {
+          const fullGame = await GamesApiService.getGame(String(similarGame.id));
+          return fullGame;
+        }),
+      );
+      return similarGames;
+    },
+    enabled: !!game?.similar_games,
+  });
+
   React.useEffect(() => {
     if (isError) {
       startRedirectTimer();
     }
   }, [isError, startRedirectTimer]);
+
+  const releaseInfo = game
+    ? `released on ${DateTime.fromISO(game.original_release_date || '').toFormat('MMM dd, yyyy')} by ${game.developers?.[0]?.name || 'Unknown Developer'}`
+    : '';
+
+  const similarGamesList = similarGamesData?.map((similarGame) => (
+    <Box key={similarGame.id} style={{ width: 'calc(25% - 12px)' }}>
+      <GameCard game={similarGame} />
+    </Box>
+  ));
 
   if (isLoading) {
     return <Spinner />;
@@ -58,22 +87,43 @@ const GamePage: React.FC = () => {
   }
 
   return (
-    <Box style={{ display: 'flex', gap: '2rem', padding: '1rem' }}>
-      <Box style={{ width: '300px' }}>
-        <img
-          src={game?.image.original_url}
-          alt={game?.name}
-          style={{
-            width: '100%',
-            height: 'auto',
-            borderRadius: '8px',
-          }}
-        />
-        {game && <AddGameToList game={game} />}
-      </Box>
-      <Box style={{ flex: 1 }}>
-        <Title order={1}>{game?.name}</Title>
-      </Box>
+    <Box p="xl" maw={1200}>
+      <Flex gap="xl">
+        <Box style={{ width: 300 }}>
+          <img
+            src={game?.image.original_url}
+            alt={game?.name}
+            style={{
+              width: '100%',
+              height: 'auto',
+              borderRadius: '8px',
+            }}
+          />
+          <Center>{game && <AddGameToList game={game} />}</Center>
+        </Box>
+
+        <Box style={{ flex: 1 }}>
+          <Title order={1} mb="sm">
+            {game?.name}
+          </Title>
+          <Text size="sm" c="dimmed" mb="lg">
+            {releaseInfo}
+          </Text>
+          <Text mb="xl">{game?.deck}</Text>
+          {game && <GameMetaData game={game} />}
+
+          {game?.similar_games && (
+            <Box mt="xl">
+              <Title order={3} mb="md">
+                {t('games.similar_games_title')}
+              </Title>
+              <Flex gap="md" wrap="wrap">
+                {similarGamesList}
+              </Flex>
+            </Box>
+          )}
+        </Box>
+      </Flex>
     </Box>
   );
 };

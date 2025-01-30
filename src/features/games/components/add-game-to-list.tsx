@@ -69,7 +69,9 @@ export const AddGameToList: React.FC<AddGameToListProps> = ({ game }) => {
 
   return (
     <>
-      <Button onClick={open}>{t('games.add_to_list')}</Button>
+      <Button onClick={open} fullWidth>
+        {t('games.add_to_list')}
+      </Button>
 
       <Modal opened={opened} onClose={close} title={t('games.select_list')}>
         <Stack>
