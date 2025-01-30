@@ -6,4 +6,5 @@ export enum QueryKeys {
   LISTS = 'lists',
   LIST = 'list',
   PLATFORMS = 'platforms',
+  SIMILAR_GAMES = 'similarGames',
 }
