@@ -1,4 +1,4 @@
-export interface GameOrderUpdate {
+export interface UpdateGameOrderData {
   id: number;
   orderNumber: number;
 }
