@@ -1,3 +1,4 @@
+import { GameApi } from '@/features/games-api';
 import { privateAxios } from '@/lib';
 
 import {
@@ -16,6 +17,16 @@ export const GamesService = {
 
   async getGamesByList(listId: number) {
     const response = await privateAxios.get<Game[]>(`/games/list/${listId}`);
+    return response.data;
+  },
+
+  async getGameByDescription(description: string): Promise<GameApi[]> {
+    const response = await privateAxios.post<GameApi[]>(
+      '/ai/games-recommendations-by-description',
+      {
+        description,
+      },
+    );
     return response.data;
   },
 
