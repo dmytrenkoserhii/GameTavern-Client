@@ -1,6 +1,12 @@
 import { privateAxios } from '@/lib';
 
-import { CreateGameData, Game, UpdateGameOrderData } from '../types';
+import {
+  CreateGameData,
+  Game,
+  GameQuestionRequestData,
+  GameQuestionResponseData,
+  UpdateGameOrderData,
+} from '../types';
 
 export const GamesService = {
   async createGame(data: CreateGameData) {
@@ -28,6 +34,11 @@ export const GamesService = {
     const response = await privateAxios.patch('/games/order', {
       updates,
     });
+    return response.data;
+  },
+
+  async getGameInfoQuestions(params: GameQuestionRequestData): Promise<GameQuestionResponseData> {
+    const response = await privateAxios.post<GameQuestionResponseData>('/ai/game-info', params);
     return response.data;
   },
 };
