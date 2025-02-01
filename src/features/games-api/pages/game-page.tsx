@@ -5,13 +5,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { Box, Center, Flex, Text, Title } from '@mantine/core';
+import { Box, Flex, Stack, Text, Title } from '@mantine/core';
 
 import { useQuery } from '@tanstack/react-query';
 
 import { NotFoundReturn, Spinner } from '@/components';
 import { QueryKeys, Routes } from '@/enums';
-import { AddGameToList, GameCard, GameMetaData } from '@/features/games';
+import { AddGameToList, GameCard, GameInfoModal, GameMetaData } from '@/features/games';
 import { useRedirectTimer } from '@/hooks';
 
 import { GamesApiService } from '../services';
@@ -99,7 +99,10 @@ const GamePage: React.FC = () => {
               borderRadius: '8px',
             }}
           />
-          <Center>{game && <AddGameToList game={game} />}</Center>
+          <Stack align="center" mt="md">
+            {game && <AddGameToList game={game} />}
+            {game && <GameInfoModal gameName={game.name} />}
+          </Stack>
         </Box>
 
         <Box style={{ flex: 1 }}>
