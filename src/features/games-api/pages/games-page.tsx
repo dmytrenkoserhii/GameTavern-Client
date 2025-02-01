@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { NotFoundReturn, Spinner } from '@/components';
 import { QueryKeys, Routes } from '@/enums';
-import { GamesCardList, GamesItemList } from '@/features/games';
+import { GamesByDescriptionModal, GamesCardList, GamesItemList } from '@/features/games';
 import { DISPLAY_OPTIONS } from '@/features/lists';
 import { useQueryParams, useRedirectTimer } from '@/hooks';
 import { GamesQueryParams, SelectItemWithIcon, ViewMode } from '@/types';
@@ -85,6 +85,7 @@ const GamesPage: React.FC = () => {
       <Box mb="xs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
         <Text>{gamesData?.total || 0} Games</Text>
         <Box style={{ display: 'flex', gap: '1rem' }}>
+          <GamesByDescriptionModal />
           <FilterGameRightBar queryParams={queryParams} onFilterChange={handleParamsChange} />
           <Select
             data={SORT_GAMES_API_OPTIONS}
