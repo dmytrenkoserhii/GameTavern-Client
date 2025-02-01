@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { BsStars } from 'react-icons/bs';
 
 import { Button, Modal, SimpleGrid, Textarea } from '@mantine/core';
+import { useField } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 
 import { useMutation } from '@tanstack/react-query';
@@ -16,7 +17,10 @@ import { GameCard } from './game-card';
 
 export const GamesByDescriptionModal: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [description, setDescription] = React.useState<string>('');
+  const description = useField({
+    initialValue: '',
+    validate: (value) => (!value.trim() ? 'Description is required' : null),
+  });
   const [recommendations, setRecommendations] = React.useState<GameApi[]>([]);
   const { t } = useTranslation();
 
@@ -28,17 +32,17 @@ export const GamesByDescriptionModal: React.FC = () => {
   });
 
   const handleSubmit = () => {
-    if (!description) {
+    if (!description.getInputProps().value) {
       return;
     }
 
     setRecommendations([]);
-    getRecommendations(description);
+    getRecommendations(description.getInputProps().value);
   };
 
   const handleClose = () => {
     close();
-    setDescription('');
+    description.reset();
     setRecommendations([]);
   };
 
@@ -55,15 +59,19 @@ export const GamesByDescriptionModal: React.FC = () => {
         size="xl"
       >
         <Textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          {...description.getInputProps()}
           placeholder={t('games.recommendations.description_placeholder')}
           minRows={3}
           mb="md"
           disabled={isPending}
         />
 
-        <Button onClick={handleSubmit} fullWidth mb="xl" disabled={!description || isPending}>
+        <Button
+          onClick={handleSubmit}
+          fullWidth
+          mb="xl"
+          disabled={!description.getInputProps().value || isPending}
+        >
           {isPending ? t('general.loading') : t('games.recommendations.submit')}
         </Button>
 
