@@ -4,3 +4,4 @@ export type { Game } from './types';
 export { GamesCardList, GamesItemList, SortableGameWrapper, GameCard } from './components';
 export { GameMetaData } from './components';
 export { GamesByDescriptionModal } from './components';
+export { GameInfoModal } from './components';

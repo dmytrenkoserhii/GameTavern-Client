@@ -5,3 +5,4 @@ export { SortableGameWrapper } from './sortable-game-wrapper';
 export { GameCard } from './game-card';
 export { GameMetaData } from './game-meta-data';
 export { GamesByDescriptionModal } from './games-by-description-modal';
+export { GameInfoModal } from './game-info-modal';
