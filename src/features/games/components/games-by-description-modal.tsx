@@ -13,7 +13,7 @@ import { Spinner } from '@/components';
 import { GameApi } from '@/features/games-api';
 
 import { GamesService } from '../services';
-import { GameCard } from './game-card';
+import { GameCard } from './game-card/game-card';
 
 export const GamesByDescriptionModal: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
