@@ -10,7 +10,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { Spinner } from '@/components';
 
-import { GAME_INFO_QUESTIONS } from '../constants/game-info-questions.constant';
+import { GAME_INFO_QUESTIONS } from '../constants';
 import { GamesService } from '../services/games.service';
 
 interface GameInfoModalProps {

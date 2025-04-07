@@ -16,7 +16,7 @@ import { SimpleGrid } from '@mantine/core';
 import { GameApi } from '@/features/games-api';
 
 import { Game } from '../types';
-import { GameCard } from './game-card';
+import { GameCard } from './game-card/game-card';
 import { SortableGameWrapper } from './sortable-game-wrapper';
 
 interface GamesCardListProps {

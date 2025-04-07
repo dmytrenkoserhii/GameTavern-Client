@@ -28,7 +28,7 @@ import { Game, GamesService } from '@/features/games';
 import { GameApi } from '@/features/games-api';
 import { GetListsRequestData, ListsService } from '@/features/lists';
 
-import { getImageUrl } from '../utils';
+import { getImageUrl } from '../../utils';
 import styles from './game-card.module.css';
 
 export interface GameCardProps {
