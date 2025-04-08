@@ -4,13 +4,13 @@
 GameTavern is a modern web application for gamers to discover, organize, and share their gaming experiences. This repository contains the client-side code of the GameTavern platform.
 
 ## 🛠️ Tech Stack
-- **Core**: React 18, TypeScript
+- **Core**: React, TypeScript
 - **State Management**: 
   - React Query
   - Zod for schema validation
 - **UI & Styling**: 
-  - Mantine UI (with various modules including forms, notifications, dropzone)
-  - PostCSS
+  - Mantine UI
+  - CSS Modules
 - **Features & Utils**:
   - DND Kit for drag-and-drop functionality
   - i18next for internationalization
